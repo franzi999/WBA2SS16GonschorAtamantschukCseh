@@ -1,0 +1,20 @@
+{
+  "name": "wba2",
+  "version": "0.0.1",
+  "main": "Buildings.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/franzi999/WBA2SS16GonschorAtamantschukCseh.git)"
+  },
+  "author": "Gonschor Atamantschuk Cseh",
+  "license": "UNLICENSED",
+
+  "dependencies": {
+    "chalk": "^1.1.3"
+  },
+  "devDependencies": {},
+  "description": ""
+}
