@@ -1,11 +1,11 @@
 var fs = require('fs');
 var chalk = require('chalk');
 
-//Datei einlesen
+
 fs.readFile(__dirname + "/wolkenkratzer.json", function (err,data) {
             var wk = JSON.parse(date.toString());
 
-      //Sortieren nach Hohe
+            //Sortieren nach Hohe
             wk.wolkenkratzer.sort(funktion(a,b)) {
 
               if (a.hohe > b.hoehe) {
@@ -18,10 +18,14 @@ fs.readFile(__dirname + "/wolkenkratzer.json", function (err,data) {
             }
       });
 
-//Farbige Ausgabe
+
+fs.writeFile(__dirname + "/wk_sortiert.json", JSON.strigify(wk), funktion(err)) {
+
+    
             for(var i in wk.wolkenkratzer) {
               console.log(chalk.red("Name: " + wk.wolkenkratzer[i].name));
               console.log(chalk.red("Stadt: " + wk.wolkenkratzer[i].stadt));
               console.log(chalk.red("Hoehe: " + wk.wolkenkratzer[i].hoehe));
               console.log("---------------------------------------------");
             }
+      });
