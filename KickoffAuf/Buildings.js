@@ -19,7 +19,7 @@ fs.readFile(__dirname + "/wolkenkratzer.json", function (err,data) {
       });
 
 //In die Datei schreiben
-fs.writeFile(__dirname + "/wk_sortiert.json", JSON.strigify(wk), funktion(err)) {
+fs.writeFile(__dirname + "/wk_sortiert.json", JSON.strigify(wk), funktion(err) {
 
             //Farbige Ausgabe
 
