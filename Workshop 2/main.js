@@ -56,11 +56,11 @@ app.get('/user/:ort', function(req, res) {
 
 app.put('/user/:id', function(req, res){
   var datasetKey = 'user:' + req.params.id;
-  db.exists(datasetKey, function(err, rep) {
+  db.hexists(datasetKey, function(err, rep) {
     if(rep ==1){
       var updatedUser = req.body;
       updatedUser.id = req.params.id;
-      db.set(datasetKey, JSON.stringify(updatedUser), function(err, rep){
+      db.hmset(datasetKey, JSON.stringify(updatedUser), function(err, rep){
         res.json(updatedUser);
       })
     }
@@ -75,11 +75,12 @@ app.put('/user/:id', function(req, res){
 
 
 
+
 // User löschen
 
 app.delete('/user/:id', function(req, res){
   var datasetKey = 'user' + req.params.id;
-  db.del(datasetKey, function(err, rep) {
+  db.hdel(datasetKey, function(err, rep) {
     if (rep == 1) {
       res.status(200)
         .type('text')
