@@ -1,0 +1,22 @@
+{
+  "users":[
+  {
+   "vorname":"Ko",
+   "nachname":"Kurochka",
+   "tel":"1434542",
+   "mobil":"01572312442",
+   "mail":"example.com",
+   "car":"Audi RS7"
+ }
+]
+}
+
+{
+"fahrten":[
+{
+ "tart":"Koeln",
+ "ziel":"Gummersbach",
+ "plaetze":"5"
+}
+]
+}
