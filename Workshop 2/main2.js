@@ -115,9 +115,6 @@ app.put('/users/:id', jsonParser, function(req, res){
 
 //FAHRT########################################################################
 
-app.listen(serverPort, function(){
-  console.log("Server gestartet");
-});
 
 app.post('/fahrten',function(req, res){
     var newFahrt = req.body;
@@ -233,3 +230,6 @@ app.put('/fahrten/:id', jsonParser, function(req, res){
 
 });
 
+app.listen(serverPort, function(){
+  console.log("Server gestartet");
+});
