@@ -97,17 +97,15 @@ app.delete('/users/:id', function(req, res){
 });
 
 
+app.put('/users/:id', jsonParser, function(req, res){
+            var neu = req.body;
+            neu.id = req.params.id;
 
+            client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
+                res.status(200).type('json').send(neu);
+            });
 
-
-
-
-
-
-
-
-
-
+});
 
 
 
@@ -119,4 +117,59 @@ app.delete('/users/:id', function(req, res){
 
 app.listen(serverPort, function(){
   console.log("Server gestartet");
+});
+
+app.post('/fahrten',function(req, res){
+    var newFahrt = req.body;
+    client.incr('id:fahrten',function(err,rep){
+        newFahrt.id = rep;
+        client.set('fahrt:'+newFahrt.id, JSON.stringify(newFahrt),function(err,rep){
+                    res.json(newFahrt);
+                });
+        });
+});
+
+
+app.delete('/fahrt/:id', function(req, res){
+    client.del('fahrt:'+req.params.id, function(err, rep) {
+        if (rep == 1) {
+            res.status(200).type('text').send('Die Fahrt '+ req.params.id + ' gelöscht');
+        }
+        else {
+            res.status(404).type('text').send('Die Fahrt' + req.params.id + 'existiert nicht');
+        }
+    });
+});
+
+
+app.get('/fahrten', function (req, res) {
+   client.keys('fahrt:*', function(err,rep){
+       var fahrten = [];
+       if(rep.length == 0){
+       res.json(fahrten);
+       return;
+   }
+       client.mget(rep,function(err,rep){
+       rep.forEach(function(val){
+           fahrten.push(JSON.parse(val));
+       });
+ fahrten = fahrten.map(function(fahrten){
+        return {Start: fahrten.start, Ziel : fahrten.ziel, Platze : fahrten.plaetze,
+                ID: fahrten.id};
+        });
+      res.json(fahrten);
+    });
+  });
+});
+
+app.get('/fahrten/:id', function(req, res){
+    client.get('fahrt:'+req.params.id, function(err, rep){
+        if (rep) {
+            res.type('json').send(rep);
+        }
+        else{
+            res.status(404).type('text').send('Fahrt '+ req.params.id +
+                                        ' existiert nicht');
+        }
+    });
 });
