@@ -173,3 +173,63 @@ app.get('/fahrten/:id', function(req, res){
         }
     });
 });
+
+app.delete('/users/:id', function(req, res){
+    client.del('user:'+req.params.id, function(err, rep) {
+        if (rep == 1) {
+          res.status(200).type('text').send('User '+ req.params.id + ' gelöscht');
+        }
+        else {
+          res.status(404).type('text').send('Der User ' + req.params.id + ' existiert nicht');
+        }
+    });
+});
+
+
+//nach Start ausgeben
+/*app.get('/fahrten', function(req, res) {
+  client.keys('fahrt:*', function(err, rep){
+    console.dir(rep);
+    if (rep.length == 0) {
+      res.json([]);
+      return;
+    }
+    client.mget(rep, function(err, rep){
+      var fahrten = rep.map(function(userStringified){
+        var fahrten = JSON.parse(userStringified);
+        if (req.query.start !== undefined) {
+          res.json(fahrten.filter(function(e, i, arr){
+            return e.start == req.query.start
+
+        }));
+      }
+      else{
+        res.json(fahrten);
+      }
+      });
+    });
+  });
+});*/
+
+app.delete('/fahrten/:id', function(req, res){
+
+    client.del('fahrt:'+req.params.id, function(err, rep) {
+        if (rep == 1) {
+            res.status(200).type('text').send('Fahrt '+ req.params.id + ' gelöscht');
+        }
+        else {
+            res.status(404).type('text').send('Fahrt ' + req.params.id + ' existiert nicht');
+        }
+    });
+});
+
+app.put('/fahrten/:id', jsonParser, function(req, res){
+            var newFahrt = req.body;
+            newFahrt.id = req.params.id;
+
+            client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
+                res.status(200).type('json').send(newFahrt);
+            });
+
+});
+
