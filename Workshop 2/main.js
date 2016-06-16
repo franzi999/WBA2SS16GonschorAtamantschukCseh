@@ -10,7 +10,7 @@ db.on("error", function (err) {
 });
 
 
-db.HMSET("users",{ "id": "1", "vorname" : "ko", "nachname" : "koko",
+db.SET("users:1" "vorname" : "ko", "nachname" : "koko",
         "email" : "example.com", "tel" : "0157342348",
         "ort" : "Koeln", "plz" : "100500", "str" : "Koelner str",
         "auto" : "Audi RS7", "platz" : "5"});
@@ -25,7 +25,7 @@ app.get('/users', function(req, res) {
       res.json([]);
       return;
     }
-    db.hgetall(rep, function(err, rep){
+    db.getall(rep, function(err, rep){
       var users = rep.map(function(userStringified){
         var user = JSON.parse(userStringified);
         return { vorname: user.name, nachname: user.nachname };
@@ -38,7 +38,7 @@ app.get('/users', function(req, res) {
 
 app.get('/user/:ort', function(req, res) {
   var datasetKey = 'user:' + req.params.ort;
-  db.hmget(datasetKey, function(err, rep) {
+  db.get(datasetKey, function(err, rep) {
     if (rep) {
       res.type('json')
         .send(rep); //Ist ja schon ein String
