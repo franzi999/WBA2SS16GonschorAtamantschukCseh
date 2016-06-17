@@ -45,10 +45,11 @@ app.get('/users', function (req, res) {
        rep.forEach(function(val){
            users.push(JSON.parse(val));
        });
-       users = users.map(function(user){
+       /*users = users.map(function(user){
         return {Vorname: user.vorname, nachname : user.nachname,
-                Email: user.mail, Tel: user.tel, Id: user.id};
-        });
+                Email: user.email, Tel: user.tel, Mobil: user.mobil, Auto: user.car,
+                Id: user.id};
+        });*/
       res.json(users);
    });
   });
@@ -69,16 +70,12 @@ app.get('/users/:id', function(req, res){
 //alle User löschen???
 
 app.delete('/users', function(req, res) {
-    client.keys('user:*', function(err, rep){ // Alle Keys holen, die mit "user:" beginnen
+    client.keys('user:*', function(err, rep){
       console.dir(rep);
       var i = 1;
-      for (i in rep){
+      for (i in rep.lenght){
         client.del('user:i', function(err, rep){
-
-          if (rep == 1) {
-
-         if (rep == 1) {
-
+        if (rep == 1) {
             res.status(200).type('text').send('User '+ i + ' gelöscht');
           }
           else {
@@ -89,6 +86,7 @@ app.delete('/users', function(req, res) {
   });
 });
 
+
 app.delete('/users/:id', function(req, res){
     client.del('user:'+req.params.id, function(err, rep) {
         if (rep == 1) {
@@ -99,76 +97,123 @@ app.delete('/users/:id', function(req, res){
         }
     });
 });
-
-
 
 app.put('/users/:id', jsonParser, function(req, res){
             var neu = req.body;
             neu.id = req.params.id;
 
+            client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
+                res.status(200).type('json').send(neu);
+            });
+
+});
+//########################################################################USERS
 
 
+//FAHRT########################################################################
+
+
+app.post('/fahrten',function(req, res){
+    var newFahrt = req.body;
+    client.incr('id:fahrten',function(err,rep){
+        newFahrt.id = rep;
+        client.set('fahrt:'+newFahrt.id, JSON.stringify(newFahrt),function(err,rep){
+                    res.json(newFahrt);
+                });
+        });
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.delete('/users/:id', function(req, res){
-    client.del('user:'+req.params.id, function(err, rep) {
+app.delete('/fahrt/:id', function(req, res){
+    client.del('fahrt:'+req.params.id, function(err, rep) {
         if (rep == 1) {
-          res.status(200).type('text').send('User '+ req.params.id + ' gelöscht');
+            res.status(200).type('text').send('Die Fahrt '+ req.params.id + ' gelöscht');
         }
         else {
-          res.status(404).type('text').send('Der User ' + req.params.id + ' existiert nicht');
+            res.status(404).type('text').send('Die Fahrt' + req.params.id + 'existiert nicht');
         }
     });
 });
 
 
-//nach Start ausgeben
-/*app.get('/fahrten', function(req, res) {
-  client.keys('fahrt:*', function(err, rep){
-    console.dir(rep);
-    if (rep.length == 0) {
-      res.json([]);
-      return;
-    }
-    client.mget(rep, function(err, rep){
-      var fahrten = rep.map(function(userStringified){
-        var fahrten = JSON.parse(userStringified);
-        if (req.query.start !== undefined) {
-          res.json(fahrten.filter(function(e, i, arr){
-            return e.start == req.query.start
-
-        }));
-      }
-      else{
-        res.json(fahrten);
-      }
-      });
+app.get('/fahrten', function (req, res) {
+   client.keys('fahrt:*', function(err,rep){
+       var fahrten = [];
+       if(rep.length == 0){
+       res.json(fahrten);
+       return;
+   }
+       client.mget(rep,function(err,rep){
+       rep.forEach(function(val){
+           fahrten.push(JSON.parse(val));
+       });
+ fahrten = fahrten.map(function(fahrt){
+        return {Start: fahrt.start, Ziel : fahrt.ziel, Platze : fahrt.plaetze,
+                ID: fahrt.id};
+        });
+      res.json(fahrten);
     });
   });
-});*/
+});
 
+//Fahrt nach start sortieren
+app.get('/fahrten/:start', function (req, res) {
+   client.keys('fahrt:*', function(err,rep){
+       var fahrten = [];
+       if(rep.length == 0){
+       res.json(fahrten);
+       return;
+   }
+       client.mget(rep,function(err,rep){
+       rep.forEach(function(val){
+           fahrten.push(JSON.parse(val));
+       });
 
+         res.json(fahrten.filter(function(n){
+           if(n.start == req.params.start)
+            return {Start: n.start, Ziel : n.ziel, Platze : n.plaetze,
+              ID: n.id};
+            else return null;
+         }));
+    });
+  });
+});
 
+app.get('/fahrten/:id', function(req, res){
+    client.get('fahrt:'+req.params.id, function(err, rep){
+        if (rep) {
+            res.type('json').send(rep);
+        }
+        else{
+            res.status(404).type('text').send('Fahrt '+ req.params.id +
+                                        ' existiert nicht');
+        }
+    });
+});
 
+app.delete('/fahrten/:id', function(req, res){
 
+    client.del('fahrt:'+req.params.id, function(err, rep) {
+        if (rep == 1) {
+            res.status(200).type('text').send('Fahrt '+ req.params.id + ' gelöscht');
+        }
+        else {
+            res.status(404).type('text').send('Fahrt ' + req.params.id + ' existiert nicht');
+        }
+    });
+});
 
+app.put('/fahrten/:id', jsonParser, function(req, res){
+            var newFahrt = req.body;
+            newFahrt.id = req.params.id;
 
+            client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
+                res.status(200).type('json').send(newFahrt);
+            });
 
+});
+
+//FAHRT########################################################################
 
 app.listen(serverPort, function(){
   console.log("Server gestartet");
