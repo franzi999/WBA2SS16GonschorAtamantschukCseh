@@ -74,7 +74,11 @@ app.delete('/users', function(req, res) {
       var i = 1;
       for (i in rep){
         client.del('user:i', function(err, rep){
+<<<<<<< HEAD
           if (rep == 1) {
+=======
+         if (rep == 1) {
+>>>>>>> 0f835b231ae408631a4368f99d82b0b92363dfde
             res.status(200).type('text').send('User '+ i + ' gelöscht');
           }
           else {
@@ -96,6 +100,24 @@ app.delete('/users/:id', function(req, res){
     });
 });
 
+<<<<<<< HEAD
+=======
+
+app.put('/users/:id', jsonParser, function(req, res){
+            var neu = req.body;
+            neu.id = req.params.id;
+>>>>>>> 0f835b231ae408631a4368f99d82b0b92363dfde
+
+
+<<<<<<< HEAD
+=======
+});
+
+
+
+
+
+>>>>>>> 0f835b231ae408631a4368f99d82b0b92363dfde
 
 
 
@@ -106,6 +128,45 @@ app.delete('/users/:id', function(req, res){
 
 
 
+<<<<<<< HEAD
+=======
+app.delete('/users/:id', function(req, res){
+    client.del('user:'+req.params.id, function(err, rep) {
+        if (rep == 1) {
+          res.status(200).type('text').send('User '+ req.params.id + ' gelöscht');
+        }
+        else {
+          res.status(404).type('text').send('Der User ' + req.params.id + ' existiert nicht');
+        }
+    });
+});
+
+
+//nach Start ausgeben
+/*app.get('/fahrten', function(req, res) {
+  client.keys('fahrt:*', function(err, rep){
+    console.dir(rep);
+    if (rep.length == 0) {
+      res.json([]);
+      return;
+    }
+    client.mget(rep, function(err, rep){
+      var fahrten = rep.map(function(userStringified){
+        var fahrten = JSON.parse(userStringified);
+        if (req.query.start !== undefined) {
+          res.json(fahrten.filter(function(e, i, arr){
+            return e.start == req.query.start
+
+        }));
+      }
+      else{
+        res.json(fahrten);
+      }
+      });
+    });
+  });
+});*/
+>>>>>>> 0f835b231ae408631a4368f99d82b0b92363dfde
 
 
 
@@ -113,10 +174,6 @@ app.delete('/users/:id', function(req, res){
 
 
 
-
-
-
-//FAHRT########################################################################
 
 app.listen(serverPort, function(){
   console.log("Server gestartet");
