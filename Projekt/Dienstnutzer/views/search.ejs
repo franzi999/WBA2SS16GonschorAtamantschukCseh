@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Mitfahrgelegenheit</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<header>
+    <ul id="head">
+        <li class="he"><a href="http://localhost:3001">Home</a></li>
+        <li class="he"><a href="http://localhost:3001/search">Fahrten</a></li>
+        <li class="he"><a href="http://localhost:3001/newfahrt">Fahrt erstellen</a></li>
+        <li class="he"><a href="http://localhost:3001/usverwaltung">User</a></li>
+        <li class="he"><a href="about.asp">About</a></li>
+    </ul>
+</header>
+<body>
+    <div id="mser">
+        <div id="dser">
+            <form id="ser" action="http://localhost:3001/search/fahrten" method="GET">
+                <label class="ser" for="start">Start</label><br>
+                <input type="text" id="start" name="start"><br>
+                <label class="ser" for="ziel">Ziel</label><br>
+                <input type="text" id="ziel" name="ziel"><br>
+                <label class="ser" for="plaetze">Plätze</label><br>
+                <input type="text" id="plaetze" name="plaetze"><br>
+                <input type="submit" name="submit" value="Finden">
+            </form>
+        </div>
+    </div>
+<footer>
+    Copyright Igelex
+</footer>
+</body>
+
+</html>
