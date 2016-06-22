@@ -18,6 +18,11 @@ app.get('/', function(req, res){
     console.log('Startseite');
 });
 
+app.get('/search', function(req, res){
+	res.render('search.ejs');
+    console.log('Suche');
+});
+
 //Fahrten beliebig sortieren
 app.get('/user/:id', jsonParser, function (req, res) {
     fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
@@ -134,6 +139,38 @@ app.get('/user/:id', jsonParser, function (req, res) {
           });
         });
 
+				app.put('/user/:id', jsonParser, function (req, res) {
+					fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
+
+											var user = JSON.stringify(req.body);
+
+					  								if (err){
+							  							throw err;
+														} else {
+										        var options = {
+										            host: 'localhost',
+										            port: '3000',
+										            path: '/users/'+req.params.id,
+										            method: 'PUT'
+										          }
+														}
+
+														var externalRequestTwo = http.request(optionsFahrt, function(externalResponse){
+															console.log('New Fahrt added');
+															externalResponse.on("data", function(chunk) {
+																			console.log("body: " + chunk);
+
+										              var html = ejs.render(filestring, {user:user});
+										              res.setHeader('content-type', 'text/html');
+										              res.writeHead(200);
+										              res.write(html);
+										              res.end();
+										            });
+										          });
+															externalRequest.write(user);
+															externalRequest.end();
+										      });
+										    });
 
 
 
