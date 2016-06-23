@@ -33,6 +33,8 @@ app.get('/usverwaltung', function(req, res){
     console.log('In Userverwaltung');
 });
 
+
+
 app.get('/user/:id', jsonParser, function (req, res) {
     fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
       if (err){
@@ -62,6 +64,85 @@ app.get('/user/:id', jsonParser, function (req, res) {
           externalRequest.end();
       });
     });
+
+		//NUR Formular
+		app.get('/putuser/id', function(req, res){
+			var userID = req.params.id;
+			console.log(userID);
+			res.render('putuser.ejs', {userID:userID});
+		    console.log('Formular fur User');
+		});
+
+		//Bestimmten user öndern
+		app.put('/user/:id', jsonParser, function (req, res) {
+			fs.readFile('./views/nores.ejs', {encoding: 'utf-8'}, function(err, filestring){
+
+									var newUser = req.body;
+
+			  								if (err){
+					  							throw err;
+												} else {
+								        var options = {
+								            host: 'localhost',
+								            port: '3000',
+								            path: '/users/'+req.params.id,
+								            method: 'PUT'
+								          }
+												}
+
+												var externalReques = http.request(options, function(externalResponse){
+													console.log('New Fahrt added');
+													externalResponse.on("data", function(chunk) {
+
+														console.log("body: " + chunk);
+
+															var html = ejs.render(filestring, {message:message});
+															res.setHeader('content-type', 'text/html');
+															res.writeHead(200);
+															res.write(newUser);
+															res.end();
+														});
+												});
+												externalRequest.setHeader("content-type", "application/json");
+												externalRequest.write(JSON.stringify(newUser));
+												console.log(newUser + "kunden post newUser");
+												externalRequest.end();
+			});
+	 });
+
+	 //User löschen
+	 app.get('/userdel/:id', jsonParser, function (req, res) {
+		 fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+								 var message="";
+
+											 if (err){
+												 throw err;
+											 } else {
+											 var options = {
+													 host: 'localhost',
+													 port: '3000',
+													 path: '/users/'+req.params.id,
+													 method: 'DELETE'
+												 }
+											 }
+
+											 var externalRequest = http.request(options, function(externalResponse){
+												 console.log('User löschen');
+												 externalResponse.on("data", function(chunk) {
+																 console.log("body: " + chunk);
+																 message=chunk;
+
+														 var html = ejs.render(filestring, {message:message});
+														 res.setHeader('content-type', 'text/html');
+														 res.writeHead(200);
+														 res.write(html);
+														 res.end();
+													 });
+												 });
+												 externalRequest.end();
+										 });
+									 });
+
 
 		//Userverwaltung(User Daten, angebotene Fahrten angucken/ändern/löschen)
 		app.get('/userdata', jsonParser, function (req, res) {
@@ -220,38 +301,53 @@ app.get('/user/:id', jsonParser, function (req, res) {
           });
         });
 
-				app.put('/user/:id', jsonParser, function (req, res) {
-					fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
-											var user = JSON.stringify(req.body);
+				//NUR Formular laden
+				app.get('/putfahrt/:id', function(req, res){
+						var fahrtID = req.params.id;
+						res.render('putfahrt.ejs', {fahrtID:fahrtID});
+								console.log(fahrtID);
+								console.log('Formular fur Fahrt');
+				});
 
-					  								if (err){
-							  							throw err;
-														} else {
-										        var options = {
-										            host: 'localhost',
-										            port: '3000',
-										            path: '/users/'+req.params.id,
-										            method: 'PUT'
-										          }
-														}
+				//Bestimmte Fahrt ändern
+				app.put('/fahrt/:id', jsonParser, function (req, res) {
+					fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+											var message="";
+											var newFahrt = req.body;
 
-														var externalRequestTwo = http.request(optionsFahrt, function(externalResponse){
-															console.log('New Fahrt added');
-															externalResponse.on("data", function(chunk) {
-																			console.log("body: " + chunk);
+											if (err){
+												throw err;
+											} else {
 
-										              var html = ejs.render(filestring, {user:user});
-										              res.setHeader('content-type', 'text/html');
-										              res.writeHead(200);
-										              res.write(html);
-										              res.end();
-										            });
-										          });
-															externalRequest.write(user);
-															externalRequest.end();
-										      });
-										    });
+												var options = {
+													host: 'localhost',
+													port: '3000',
+													path: '/fahrt/'+req.params.id,
+													method: 'PUT'
+												}
+											}
+
+															var externalReques = http.request(options, function(externalResponse){
+																console.log('New Fahrt added');
+																externalResponse.on("data", function(chunk) {
+
+																	console.log("body: " + chunk);
+
+																		var html = ejs.render(filestring, {message:message});
+																		res.setHeader('content-type', 'text/html');
+																		res.writeHead(200);
+																		res.write(newFahrt);
+																		res.end();
+																	});
+															});
+															externalRequest.setHeader("content-type", "application/json");
+				    									externalRequest.write(JSON.stringify(newFahrt));
+				    									console.log(newFahrt + "kunden post newUser");
+				    									externalRequest.end();
+						});
+				 });
+
 
 
 
