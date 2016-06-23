@@ -23,7 +23,16 @@ app.get('/search', function(req, res){
     console.log('Suche');
 });
 
-//Fahrten beliebig sortieren
+app.get('/newfahrt', function(req, res){
+	res.render('newfahrt.ejs');
+    console.log('New Fahrt');
+});
+
+app.get('/usverwaltung', function(req, res){
+	res.render('usverwaltung.ejs');
+    console.log('In Userverwaltung');
+});
+
 app.get('/user/:id', jsonParser, function (req, res) {
     fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
       if (err){
@@ -54,6 +63,78 @@ app.get('/user/:id', jsonParser, function (req, res) {
       });
     });
 
+		//Userverwaltung(User Daten, angebotene Fahrten angucken/ändern/löschen)
+		app.get('/userdata', jsonParser, function (req, res) {
+		    fs.readFile('./views/userdata.ejs', {encoding: 'utf-8'}, function(err, filestring){
+
+					var user = [];
+					var userFahrten = [];
+					var nores="";
+
+					if (err){
+		        throw err;
+		      } else {
+		          var useroptions = {
+		            host: 'localhost',
+		            port: '3000',
+		            path: '/users/'+req.query.id,
+		            method: 'GET'
+		          }
+
+						var fahrtoptions = {
+							host: 'localhost',
+							port: '3000',
+							path: '/fahrten',
+							method: 'GET'
+						}
+					}
+					console.log(req.query.id);
+
+		          var externalRequestOne = http.request(useroptions, function(externalResponse){
+		            console.log('UserDate Holen');
+		            externalResponse.on('data', function(chunk) {
+
+		              var user = JSON.parse(chunk);
+									console.log(user);
+								});
+							});
+
+							var externalRequestTwo = http.request(fahrtoptions, function(externalResponse){
+		            console.log('UserFahrten Holen');
+		            externalResponse.on('data', function(chunk) {
+
+		              var fahrten = JSON.parse(chunk);
+									var userFahrten = [];
+
+									fahrten.forEach(function(fahrt){
+
+										if(fahrt.u_id == req.query.id){
+											userFahrten.push(fahrt);
+											console.log(fahrt);
+										}
+									});
+									console.log();
+									console.log(userFahrten);
+
+									if (Object.keys(userFahrten).length == 0) {
+									    console.log('nores wird ausgegeben');
+											nores="Keine Fahrten"
+									}
+
+		              var html = ejs.render(filestring, {"user":user , userFahrten:userFahrten, nores:nores});
+		              res.setHeader('content-type', 'text/html');
+		              res.writeHead(200);
+		              res.write(html);
+		              res.end();
+								});
+							});
+
+		          externalRequestOne.end();
+							externalRequestTwo.end();
+		      });
+		    });
+
+		//Fahrten beliebig sortieren
     app.get('/search/fahrten', jsonParser, function (req, res) {
         fs.readFile('./views/fahrt.ejs', {encoding: 'utf-8'}, function(err, filestring){
           if (err){
