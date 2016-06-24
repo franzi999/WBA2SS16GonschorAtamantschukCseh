@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Mitfahrgelegenheit</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+    <!--<script type="text/javascript">
+      function deleteFahrt(id) {
+        alert(id);
+        $.ajax({
+           host: 'localhost',
+           port: 3001,
+           url: '/fahrtdel/' + id,
+           type: 'DELETE',
+           success: function(data){
+             if(data==404) alert("Fehler");
+             else {
+               alert("Fahrt gelöscht");
+               window.location.href = 'http://localhost:3001/success';
+             }
+           }
+       });
+     };
+   </script>-->
+</head>
+<header>
+    <ul id="head">
+        <li class="he"><a href="http://localhost:3001">Home</a></li>
+        <li class="he"><a href="http://localhost:3001/search">Fahrten</a></li>
+        <li class="he"><a href="http://localhost:3001/newuser">Fahrt erstellen</a></li>
+        <li class="he"><a href="http://localhost:3001/usverwaltung">User</a></li>
+        <li class="he"><a href="about.asp">About</a></li>
+    </ul>
+</header>
+<body>
+    <div id="mid">
+        <div id="uid">
+          <p>Ihre Persönliche Daten</p>
+
+            <ul id="udlist">
+
+                <li>Name: <%= u.nachname%> </li><br>
+                <li>Vorname: <%= u.vorname %> </li><br>
+                <li>Email: <%= u.email %> </li><br>
+                <li>Telefon: <%= u.tel %> </li><br>
+                <li>Handy: <%= u.mobil %> </li><br>
+                <li>Fahrzeug: <%= u.car %> </li><br>
+
+            </ul>
+
+            <form>
+                <input type="button" name="submit" onclick="location.href='http://localhost:3001/putuser/24'" value="Ändern">
+                <input type="button" name="submit" onclick="location.href='http://localhost:3001/userdel/24'" value="Löschen">
+            </form>
+        </div>
+        <div class="trenner">
+            <p id="ihre">Ihre Fahrten: <%= nores%></p>
+        </div>
+
+            <% userFahrten.forEach(function(fahrt) { %>
+              <div class="users">
+                  <ul class="list">
+                      <li>Start: <%= fahrt.start%> </li><br>
+                      <li>Ziel: <%= fahrt.ziel %> </li><br>
+                      <li>Plaetze: <%= fahrt.plaetze %> </li><br>
+                  </ul>
+                      <input type="button" name="submit" onclick="location.href='http://localhost:3001/putfahrt/<%= fahrt.id %>'" value="Ändern">
+                      <input type="button" name="submit" onclick="location.href='http://localhost:3001/fahrtdel/<%= fahrt.id %>'" value="Löschen">
+              </div>
+              <% }); %>
+    </div>
+<footer>
+    Copyright Igelex
+</footer>
+</body>
+
+</html>
