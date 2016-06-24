@@ -1,0 +1,256 @@
+header{
+  height: 102px;
+  background-color: cadetblue ;
+  padding: px 0 0 0;
+}
+
+body {
+  background-image: url(city.jpg);
+  background-attachment: fixed;
+}
+}
+
+#mid{
+    margin: auto;
+    min-height: 800px;
+}
+
+.list{
+    list-style-type: none;
+    color: #C0C0C0;
+    font-family: "Verdana";
+    font-size: 20px;
+    margin: 0;
+    padding-left: 40px;
+
+}
+
+*{
+    margin: auto;
+}
+
+.users{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px 0 30px 0;
+    width: 800px;
+    height: 160px;
+    background-color: white;
+}
+
+div > div:nth-child(odd) {
+    background-color: #E7E7F2;;
+}
+div.users:hover{
+     box-shadow: 0 4px 8px 0 black, 0 66px 20px 0 rgba(0, 0, 0, 0.19);
+}
+footer{
+    margin: auto;
+    height: 130px;
+    background-color: cadetblue;
+    padding: 50px;
+    text-align: center;
+    clear: both
+}
+
+input[type=button]{
+    background-color: cadetblue;
+    border: none;
+    color: white;
+    padding: 10px 30px;
+    text-decoration: none;
+    margin: 0px 0 10px 40px;
+    cursor: pointer;
+  }
+
+    input[type=submit]{
+        background-color: cadetblue;
+        border: none;
+        color: white;
+        padding: 10px 30px;
+        text-decoration: none;
+        margin: 10px 0px 0px 0px;
+        cursor: pointer;
+}
+
+#head {
+    margin-left: auto;
+    margin-right: auto;
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+    background-color: cadetblue;
+    font-family: "Verdana";
+    font-size: 20px;
+    width: 960px;
+    align-content: center;
+
+}
+
+li.he {
+    float: left;
+}
+
+li.he a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    margin-top: 50px;
+    width: 150px;
+}
+
+li.he a:hover {
+    background-color: #3D8082;
+}
+
+#mser{
+    padding: 100px 0 100px 0;
+    background-image: url(city.jpg);
+    margin: auto;
+    background-attachment: fixed;
+}
+
+#dser{
+    padding: 40px 0 0 60px;
+    height: 350px;
+    width: 890px;
+    background-color: white;
+    font-family: "Verdana";
+    font-size: 20px;
+}
+
+input[type=text] {
+    font-family: "Verdana";
+    font-size: 20px;
+    color: #666464;
+    width: 550px;
+    padding: 10px 30px;
+    margin: 8px 0 10px 0;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #DDDBDB;
+    background-color: #EEEEEE;
+}
+
+input[type=text]:focus {
+    border: 1px solid red;
+}
+
+.ser{
+   padding-right: 20px;
+    margin-right: 100px;
+    color: #C0C0C0;
+}
+
+.submit{
+    background-color: cadetblue;
+    border: none;
+    color: white;
+    padding: 10px 30px;
+    text-decoration: none;
+    margin: 20px 0px;
+    cursor: pointer;
+}
+
+#dnew{
+    padding: 40px 0 0 60px;
+    height: 1050px;
+    width: 890px;
+    background-color: white;
+    font-family: "Verdana";
+    font-size: 20px;
+}
+#dputf{
+  padding: 40px 0 0 60px;
+  height: 500px;
+  width: 890px;
+  background-color: white;
+  font-family: "Verdana";
+  font-size: 20px;
+}
+
+hr{
+  margin: 20px 0 20px 0;
+}
+
+p{
+  font-family: "Verdana";
+  font-size: 30px;
+  margin: 20px 0 20px 0;
+  color: #666464;
+}
+
+#ihre{
+  font-family: "Verdana";
+  font-size: 30px;
+  margin:auto;
+  color: #666464;
+}
+
+#uid{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 800px;
+  height: 400px;
+  background-color: white;
+}
+#lid{
+  list-style-type: none;
+  color: #C0C0C0;
+  font-family: "Verdana";
+  font-size: 20px;
+  margin: 20px 0 20px 0;
+}
+
+.trenner{
+  padding-top: 10px;
+  background-color: white;
+  height: 50px;
+  margin: 10px 0;
+  width: auto;;
+  text-align: center;
+}
+
+#fdata{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 800px;
+  height: 750px;
+  background-color: white;
+}
+
+#buch{
+  font-family: "Verdana";
+  font-size: 20px;
+  margin: 0 10px 0 40px;
+}
+
+#weiter{
+  font-family: "Verdana";
+  font-size: 20px;
+  margin: 40px 0 0 0;
+}
+
+#mail{
+  margin: 0 20px 0 0;
+}
+
+#udlist{
+  list-style-type: none;
+  color: #C0C0C0;
+  font-family: "Verdana";
+  font-size: 20px;
+  margin: 20px 0 0 0;
+}
+
+input:required:invalid, input:focus:invalid {
+  border-color: #DC9D9D;
+  -moz-box-shadow: black;
+}
+input:required:valid {
+  border-color: #A2E7BA;
+}

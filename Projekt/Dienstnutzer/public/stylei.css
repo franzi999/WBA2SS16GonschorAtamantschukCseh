@@ -1,0 +1,89 @@
+body{
+    background-image: url(city.jpg);
+    background-attachment: fixed;
+}
+header{
+    height: 102px;
+    background-color:cadetblue;
+    padding: px 0 0 0;
+}
+
+#mid{
+    margin-top: 100px;
+    margin-bottom: 100px;
+    width: 825px;
+    min-height: 300px;
+}
+
+*{
+    margin: auto;
+}
+
+div.in:hover{
+     box-shadow: 0 4px 8px 0 black, 0 66px 20px 0 rgba(0, 0, 0, 0.19);
+}
+footer{
+    margin: auto;
+    height: 130px;
+    background-color: cadetblue;
+    padding: 50px;
+    text-align: center;
+    clear: both
+}
+input{
+    background-color: cadetblue;
+    border: none;
+    color: white;
+    padding: 10px 30px;
+    text-decoration: none;
+    margin: 0px 40px;
+    cursor: pointer;
+
+}
+
+.in {
+    text-align: center;
+    padding-top: 180px;
+    width: 400px;
+    height: 220px;
+    display:inline-block;
+    background-color:darkgray;
+    font-family: "Verdana";
+    font-size: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    overflow: hidden;
+}
+
+
+ul {
+    margin-left: auto;
+    margin-right: auto;
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+    background-color: cadetblue;
+    font-family: "Verdana";
+    font-size: 20px;
+    width: 960px;
+    align-content: center;
+
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    margin-top: 50px;
+    width: 150px;
+}
+
+li a:hover {
+    background-color: #3D8082;
+}
