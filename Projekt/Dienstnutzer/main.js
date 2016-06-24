@@ -354,8 +354,41 @@ app.get('/user/:id', jsonParser, function (req, res) {
 						});
 				 });
 
+                //User erstellen
+                app.post("/users", function(req, res){
+                  fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+                                     var u_id;
 
+                                     var newUser =JSON.stringify(req.body);
+                                     console.console.log(newUser);
+                                     if (err){
+                                       throw err;
+                                     } else {
 
+                                       var options = {
+                                         host: 'localhost',
+                                         port: '3000',
+                                         paht: '/users',
+                                         method: "POST",
+                                         headers: {
+                                         accept: "application/json",
+                                         "Content-Type": "application/json",
+                           "Content-Length": Buffer.byteLength(newUser)
+                                         }
+                                       }
+                                     }
+
+                                     var externalRequest = http.request(options, function(externalResponse){
+                                       console.log('User löschen');
+                                       externalResponse.on("data", function(chunk) {
+                                               console.log("body: " + chunk);
+                                               u_id=chunk;
+                                       });
+                                     });
+                                     externalRequest.write(newUser);
+                                     externalRequest.end();
+                  });
+                });
 
 
     app.listen(serverPort, function(){
