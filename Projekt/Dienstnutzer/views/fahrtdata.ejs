@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title> Mitfahrgelegenheit</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+      $("#buch").submit(function(event) {
+        //Abschicken und Seite neu laden) unterbinden
+        event.preventDefault();
+        var newFahrt = {
+          start: <%= fahrt.start%>,
+          ziel: <%= fahrt.ziel%>,
+          plaetze: <%= fahrt.plaetze - 1 %>,
+          u_id: <%= fahrt.u_id%>,
+        };
+        alert("koko");
+        $.ajax({
+          type: 'PUT',
+          host: 'localhost',
+          url: '/fahrt/'+ <%= fahrt.id %>,
+          contentType: 'application/json',
+          data: JSON.stringify(newFahrt)
+        }).done(function (data) {
+          // Bei Erfolg
+            window.location.href = 'http://localhost:3001/message'
+            alert("Erfolgreich:" + data);
+        }).fail(function() {
+          // Bei Fehler
+            alert("Fehler!");
+        }).always(function() {
+            // Immer
+            alert("Beendet!");
+        });
+      });
+    </script>
+</head>
+<header>
+    <ul id="head">
+        <li class="he"><a href="http://localhost:3001">Home</a></li>
+        <li class="he"><a href="http://localhost:3001/search">Fahrten</a></li>
+        <li class="he"><a href="http://localhost:3001/newuser">Fahrt erstellen</a></li>
+        <li class="he"><a href="http://localhost:3001/usverwaltung">User</a></li>
+        <li class="he"><a href="about.asp">About</a></li>
+    </ul>
+</header>
+<body>
+    <div id="mid">
+        <div id="fdata">
+              <ul class="list">
+                <p> Augewaehlte Fahrt</p>
+                <hr>
+                  <li>Start: <%= fahrt.start%> </li><br>
+                  <li>Ziel: <%= fahrt.ziel %> </li><br>
+                  <li>Plaetze: <%= fahrt.plaetze %> </li><br>
+              </ul>
+            <ul id="lid">
+              <p>Kontaktdaten des Anbieters</p>
+              <hr>
+              <% users.forEach(function(users) { %>
+                <li>Name: <%= users.nachname%> </li><br>
+                <li>Vorname: <%= users.vorname %> </li><br>
+                <li>Email: <%= users.email %> </li><br>
+                <li>Telefon: <%= users.tel %> </li><br>
+                <li>Handy: <%= users.mobil %> </li><br>
+                <li>Fahrzeug: <%= users.car %> </li><br>
+                <% }); %>
+            </ul>
+            <form id="buch">
+                <label class="ser" for="mail">Ihre Email</label><br>
+                <input type="text" id="mail" name="mail">
+                <input type="submit" name="submit" value="buchen">
+            </form>
+        </div>
+    </div>
+<footer>
+    Copyright Igelex
+</footer>
+</body>
+
+</html>

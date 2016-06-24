@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title> Mitfahrgelegenheit</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<header>
+    <ul id="head">
+        <li class="he"><a href="http://localhost:3001">Home</a></li>
+        <li class="he"><a href="http://localhost:3001/search">Fahrten</a></li>
+        <li class="he"><a href="http://localhost:3001/newuser">Fahrt erstellen</a></li>
+        <li class="he"><a href="http://localhost:3001/usverwaltung">User</a></li>
+        <li class="he"><a href="about.asp">About</a></li>
+    </ul>
+</header>
+<body>
+    <div id="mid">
+      <% fFahrten.forEach(function(fahrt) { %>
+        <div class="users">
+            <ul class="list">
+                <li>Start: <%= fahrt.start%> </li><br>
+                <li>Ziel: <%= fahrt.ziel %> </li><br>
+                <li>Plaetze: <%= fahrt.plaetze %> </li><br>
+            </ul>
+            <input type="button" value="Mehr" onclick="location.href='http://localhost:3001/fahrt/<%= fahrt.u_id%>'">
+        </div>
+        <% }); %>
+    </div>
+<footer>
+    Copyright Igelex
+</footer>
+<script src="/javascript/scripts.js"></script>
+</body>
+
+</html>
