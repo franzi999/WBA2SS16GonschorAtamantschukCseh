@@ -23,8 +23,14 @@ app.get('/search', function(req, res){
     console.log('Suche');
 });
 
-app.get('/newfahrt', function(req, res){
-	res.render('newfahrt.ejs');
+app.get('/newuser', function(req, res){
+	res.render('newuser.ejs');
+    console.log('New User');
+});
+
+app.get('/newfahrt/:u_id', function(req, res){
+	var u_id=req.params.u_id;
+	res.render('newfahrt.ejs', {u_id:u_id});
     console.log('New Fahrt');
 });
 
