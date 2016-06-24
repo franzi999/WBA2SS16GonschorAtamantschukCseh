@@ -3,44 +3,13 @@
 <head>
     <title> Mitfahrgelegenheit</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">s
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-    <script>
-      $("#ser").submit(function(event) {
-        //Abschicken und Seite neu laden) unterbinden
-        event.preventDefault();
-        var newUser = {
-          vorname: $("#vorname").val(),
-          nachname: $("#nachname").val(),
-          tel: $("#tel").val(),
-          mobil: $("#handy").val(),
-          mail: $("#email").val(),
-          car: $("#car").val(),
-        };
-        $.ajax({
-          type: 'POST',
-          host: 'localhost',
-          url: '/newfahrt/add',
-          data: JSON.stringify(newUser)
-        }).done(function (data) {
-          // Bei Erfolg
-            alert("Erfolgreich:" + data);
-        }).fail(function() {
-          // Bei Fehler
-            alert("Fehler!");
-        }).always(function() {
-            // Immer
-            alert("Beendet!");
-        });
-      });
-    </script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <header>
     <ul id="head">
         <li class="he"><a href="http://localhost:3001">Home</a></li>
         <li class="he"><a href="http://localhost:3001/search">Fahrten</a></li>
-        <li class="he"><a href="http://localhost:3001/newfahrt">Fahrt erstellen</a></li>
+        <li class="he"><a href="http://localhost:3001/newuser">Fahrt erstellen</a></li>
         <li class="he"><a href="http://localhost:3001/usverwaltung">User</a></li>
         <li class="he"><a href="about.asp">About</a></li>
     </ul>
@@ -48,28 +17,17 @@
 <body>
     <div id="mser">
         <div id="dnew">
-          <p>Geben Sie Ihre persönlichen Daten ein</p>
-          <form id="ser" action="http://localhost:3001/newfahrt/add">
-              <label class="ser" for="vorname">VorName</label><br>
-              <input type="text" id="vorname" name="vorname"><br>
-              <label class="ser" for="vorname">Nachname</label><br>
-              <input type="text" id="nachname" name="nachname"><br>
-              <label class="ser" for="tel">Telefon</label><br>
-              <input type="text" id="tel" name="tel"><br>
-              <label class="ser" for="mobil">Handy</label><br>
-              <input type="text" id="mobil" name="mobil"><br>
-              <label class="ser" for="email">Email</label><br>
-              <input type="text" id="email" name="email"><br>
-              <label class="ser" for="car">Fahrzeug</label><br>
-              <input type="text" id="car" name="car"><br>
-              <hr>
+          <form id="ser" action="http://localhost:3001/fahrten" method="GET">
               <p>Geben Sie die Fahrt ein</p>
+              <p>Ihre Benutzer-ID: <%= u_id %></p>
               <label class="ser" for="start">Start</label><br>
               <input type="text" id="start" name="start"><br>
               <label class="ser" for="ziel">Ziel</label><br>
               <input type="text" id="ziel" name="ziel"><br>
               <label class="ser" for="plaetze">Plätze</label><br>
               <input type="text" id="plaetze" name="plaetze"><br>
+              <label class="ser" for="u_id">Benutzer_ID</label><br>
+              <input type="text" id="u_id" name="u_id"><br>
               <input type="submit" name="submit" value="Speichern">
           </form>
         </div>
