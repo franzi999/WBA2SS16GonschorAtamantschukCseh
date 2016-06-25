@@ -17,7 +17,7 @@ app.post('/users',function(req, res){
     client.incr('id:users',function(err,rep){
         newUser.id = rep;
         client.set('user:'+newUser.id, JSON.stringify(newUser),function(err,rep){
-                    res.json(newUser);
+                    res.json("User hinzugefügt");
                 });
         });
 });
@@ -100,7 +100,7 @@ app.put('/users/:id', jsonParser, function(req, res){
             neu.id = req.params.id;
 
             client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
-                res.status(200).type('json').send(neu);
+                res.status(200).type('json').send("User geändert");
             });
 
 });
@@ -115,7 +115,7 @@ app.post('/fahrten',function(req, res){
     client.incr('id:fahrten',function(err,rep){
         newFahrt.id = rep;
         client.set('fahrt:'+newFahrt.id, JSON.stringify(newFahrt),function(err,rep){
-                    res.json(newFahrt);
+                    res.json("Fahrt hinzugefügt");
                 });
         });
 });
@@ -217,7 +217,7 @@ app.put('/fahrten/:id', jsonParser, function(req, res){
             newFahrt.id = req.params.id;
 
             client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
-                res.status(200).type('json').send(newFahrt);
+                res.status(200).type('json').send("Fahrt geändert");
             });
 
 });
