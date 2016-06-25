@@ -2,39 +2,37 @@
 <html>
 <head>
     <title> Mitfahrgelegenheit</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">s
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
     <script>
-      $("#ser").submit(function(event) {
-        //Abschicken und Seite neu laden) unterbinden
-        event.preventDefault();
+    $(function(){
+      $("#sub").click(function(event) {
+        alert("Put ++++++++");
+        //Abschicken und Seite neu laden unterbinden
+        //event.preventDefault();
         var newUser = {
           vorname: $("#vorname").val(),
           nachname: $("#nachname").val(),
           tel: $("#tel").val(),
-          mobil: $("#handy").val(),
+          mobil: $("#mobil").val(),
           mail: $("#email").val(),
           car: $("#car").val(),
+          id: <%= userID %>
         };
         $.ajax({
           type: 'PUT',
           host: 'localhost',
-          url: '/user/'+ <%= userID %>,
+          url: '/user/' + <%= userID %> ,
           contentType: 'application/json',
-          data: JSON.stringify(newUser)
-        }).done(function (data) {
-          // Bei Erfolg
-            window.location.href = 'http://localhost:3001/message'
-            alert("Erfolgreich:" + data);
-        }).fail(function() {
-          // Bei Fehler
-            alert("Fehler!");
-        }).always(function() {
-            // Immer
-            alert("Beendet!");
+          data: JSON.stringify(newUser),
+          success: function(newUser){
+            alert('success');
+            console.log(JSON.stringify(newUser));
+          }
         });
       });
+    });
     </script>
 
 </head>
@@ -67,7 +65,7 @@
               <input type="text" id="email" name="email"><br>
               <label class="ser" for="car">Fahrzeug</label><br>
               <input type="text" id="car" name="car"><br>
-              <input type="submit" name="submit" value="Speichern">
+              <input type="submit" id="sub" name="submit" value="Speichern">
           </form>
         </div>
     </div>

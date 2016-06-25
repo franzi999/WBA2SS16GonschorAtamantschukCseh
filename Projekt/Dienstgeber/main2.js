@@ -15,9 +15,10 @@ app.use(bodyParser.json());
 app.post('/users',function(req, res){
     var newUser = req.body;
     client.incr('id:users',function(err,rep){
+        id=rep;
         newUser.id = rep;
         client.set('user:'+newUser.id, JSON.stringify(newUser),function(err,rep){
-                    res.json("User hinzugefügt");
+                    res.json(newUser);
                 });
         });
 });
@@ -100,7 +101,7 @@ app.put('/users/:id', jsonParser, function(req, res){
             neu.id = req.params.id;
 
             client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
-                res.status(200).type('json').send("User geändert");
+                res.status(200).type('json').send(neu);
             });
 
 });
@@ -115,9 +116,14 @@ app.post('/fahrten',function(req, res){
     client.incr('id:fahrten',function(err,rep){
         newFahrt.id = rep;
         client.set('fahrt:'+newFahrt.id, JSON.stringify(newFahrt),function(err,rep){
-                    res.json("Fahrt hinzugefügt");
-                });
+          if (err) {
+              res.status(404).type('text').send('Die Fahrt' + newFahrt.id + 'konnte nicht gepostet werde');
+          }
+          else {
+              res.status(200).type('text').send('Die Fahrt '+ newFahrt.id + ' gepostet');
+          }
         });
+    });
 });
 
 
@@ -152,7 +158,7 @@ app.get('/fahrten', function (req, res) {
     });
   });
 });
-
+/*
 //Fahrt nach start sortieren
 app.get('/fahrten/:start', function (req, res) {
    client.keys('fahrt:*', function(err,rep){
@@ -217,7 +223,7 @@ app.put('/fahrten/:id', jsonParser, function(req, res){
             newFahrt.id = req.params.id;
 
             client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
-                res.status(200).type('json').send("Fahrt geändert");
+                res.status(200).type('json').send('Fahrt geändert');
             });
 
 });

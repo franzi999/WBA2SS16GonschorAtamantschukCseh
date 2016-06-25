@@ -72,18 +72,19 @@ app.get('/user/:id', jsonParser, function (req, res) {
     });
 
 		//NUR Formular
-		app.get('/putuser/id', function(req, res){
+		app.get('/putuser/:id', function(req, res){
 			var userID = req.params.id;
 			console.log(userID);
 			res.render('putuser.ejs', {userID:userID});
 		    console.log('Formular fur User');
 		});
 
-		//Bestimmten user öndern
+		//Bestimmten user öndern (ok)
 		app.put('/user/:id', jsonParser, function (req, res) {
 			fs.readFile('./views/nores.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
-									var newUser = req.body;
+									var newUser =JSON.stringify(req.body);
+									console.log(newUser);
 
 			  								if (err){
 					  							throw err;
@@ -91,39 +92,35 @@ app.get('/user/:id', jsonParser, function (req, res) {
 								        var options = {
 								            host: 'localhost',
 								            port: '3000',
-								            path: '/users/'+req.params.id,
-								            method: 'PUT'
+								            path: '/users/'+req.body.id,
+								            method: 'PUT',
+														headers: {
+            									accept:"application/json"
+        										}
 								          }
 												}
 
-												var externalReques = http.request(options, function(externalResponse){
-													console.log('User geeandert');
+												var externalRequest = http.request(options, function(externalResponse){
+													console.log('User put');
 													externalResponse.on("data", function(chunk) {
-
 														console.log("body: " + chunk);
-
-															var html = ejs.render(filestring, {message:message});
-															res.setHeader('content-type', 'text/html');
-															res.writeHead(200);
-															res.write(newUser);
-															res.end();
 														});
 												});
 												externalRequest.setHeader("content-type", "application/json");
-												externalRequest.write(JSON.stringify(newUser));
-												console.log(newUser + "put newUser");
-												externalRequest.end();
+					 							externalRequest.write(JSON.stringify(req.body));
+					 							console.log("Userdaten wurden überarbeitet");
+					 							externalRequest.end();
 			});
 	 });
 
-                
+
                 //User erstellen
                 app.post("/users", function(req, res){
-                  fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+                  fs.readFile('./views/newFahrt.ejs', {encoding: 'utf-8'}, function(err, filestring){
                                      var u_id;
 
                                      var newUser =JSON.stringify(req.body);
-                                     console.console.log(newUser);
+                                     console.log(newUser);
                                      if (err){
                                        throw err;
                                      } else {
@@ -132,12 +129,7 @@ app.get('/user/:id', jsonParser, function (req, res) {
                                          host: 'localhost',
                                          port: '3000',
                                          paht: '/users',
-                                         method: "POST",
-                                         headers: {
-                                         accept: "application/json",
-                                         "Content-Type": "application/json",
-                           "Content-Length": Buffer.byteLength(newUser)
-                                         }
+                                         method: "POST"
                                        }
                                      }
 
@@ -145,11 +137,18 @@ app.get('/user/:id', jsonParser, function (req, res) {
                                        console.log('User erstellt');
                                        externalResponse.on("data", function(chunk) {
                                                console.log("body: " + chunk);
-                                               u_id=chunk;
+                                               u_id = JSON.parse(chunk);
+
+																							var html = ejs.render(filestring, {u_id:u_id});
+				 																			res.setHeader('content-type', 'text/html');
+				 																			res.writeHead(200);
+				 																			res.write(html);
+				 																			res.end();
                                        });
                                      });
-                                     externalRequest.write(newUser);
-                                     externalRequest.end();
+																		 externalRequest.setHeader("content-type", "application/json");
+ 																	 	 externalRequest.write(JSON.stringify(req.body));
+ 																	 	 externalRequest.end();
                   });
                 });
 
@@ -261,6 +260,30 @@ app.get('/user/:id', jsonParser, function (req, res) {
 		    });
 
 
+				app.get('/fahrt/:id', jsonParser, function (req, res) {
+
+				          var options = {
+				            host: 'localhost',
+				            port: '3000',
+				            path: '/fahrten/'+req.params.id,
+				            method: 'GET'
+				          }
+
+				          var externalRequest = http.request(options, function(externalResponse){
+				            console.log('Fahrt nach Id');
+				            externalResponse.on('data', function(chunk) {
+
+				              var fahrt = JSON.parse(chunk);
+											console.log(fahrt.u_id);
+
+											res.send(fahrt);
+				              res.end();
+				            });
+				          });
+				          externalRequest.end();
+				    });
+
+
     //Fahrten beliebig sortieren
     app.get('/search/fahrten', jsonParser, function (req, res) {
         fs.readFile('./views/fahrt.ejs', {encoding: 'utf-8'}, function(err, filestring){
@@ -352,10 +375,10 @@ app.get('/user/:id', jsonParser, function (req, res) {
 	app.get('/fahrt/:id', jsonParser, function (req, res) {
 	    fs.readFile('./views/fahrtdata.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
-				    var fahrt=[];
+				    				var fahrt=[];
 
-				    if (err){
-	                   throw err;
+				    				if (err){
+	                   		throw err;
                     } else {
                         var fahrtoptions = {
 	                           host: 'localhost',
@@ -363,47 +386,47 @@ app.get('/user/:id', jsonParser, function (req, res) {
 	                           path: '/fahrten/'+req.params.id,
 	                           method: 'GET'
 	                   }
-						var useroptions = {
-							    host: 'localhost',
-                                port: '3000',
-                                path: '/users',
-				                method: 'GET'
-						}
-					}
+										 		var useroptions = {
+							    						host: 'localhost',
+                              port: '3000',
+                              path: '/users',
+				                			method: 'GET'
+												}
+											}
 
-	               var externalRequestOne = http.request(fahrtoptions, function(externalResponse){
-	                   console.log('Fahrt Data');
-	                   externalResponse.on('data', function(chunk) {
+	               			var externalRequestOne = http.request(fahrtoptions, function(externalResponse){
+				                   console.log('Fahrt Data');
+	                   			 externalResponse.on('data', function(chunk) {
 
-	                       fahrt = JSON.parse(chunk);
-				            console.log(fahrt.u_id);
-				        });
-				    });
-					
-                    var externalRequestTwo = http.request(useroptions, function(externalResponse){
-			            console.log('UserDate Holen');
-			            externalResponse.on('data', function(chunk) {
+	                       			fahrt = JSON.parse(chunk);
+				            					console.log(fahrt.u_id);
+				        					});
+				    					});
 
-                            var user = JSON.parse(chunk);
-							var users = [];
-                            console.log(fahrt.u_id);
+                    	var externalRequestTwo = http.request(useroptions, function(externalResponse){
+			            					console.log('UserDate Holen');
+			            					externalResponse.on('data', function(chunk) {
 
-							user.forEach(function(user){
-                                if(fahrt.u_id == user.id){
-								users.push(user);
-								console.log(users);
-								}
-                            });
+                            		var user = JSON.parse(chunk);
+																var users = [];
+                            		console.log(fahrt.u_id);
 
-	                   var html = ejs.render(filestring, {fahrt:fahrt, users:users});
-	                   res.setHeader('content-type', 'text/html');
-	                   res.writeHead(200);
-	                   res.write(html);
-	                   res.end();
-	                   });
-	               });
-	               externalRequestOne.end();
-				   externalRequestTwo.end();
+																user.forEach(function(user){
+                                		if(fahrt.u_id == user.id){
+																				users.push(user);
+																				console.log(users);
+																		}
+                            		});
+
+	                   						var html = ejs.render(filestring, {fahrt:fahrt, users:users});
+	                   						res.setHeader('content-type', 'text/html');
+	                    					res.writeHead(200);
+	                    					res.write(html);
+	                    					res.end();
+	                   					});
+	               				});
+	               				externalRequestOne.end();
+				   	 		 				externalRequestTwo.end();
 	      });
 	    });
 
@@ -420,139 +443,81 @@ app.get('/user/:id', jsonParser, function (req, res) {
 
 
     //Bestimmte Fahrt ändern
-    app.put('/fahrt/:id', jsonParser, function (req, res) {
-        fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
-											
-                    var message="";
-				    var newFahrt = req.body;
-                    
-                    if (err){
-				        throw err;
-				    } else {
+		app.put('/fahrt/:id', jsonParser, function (req, res) {
+			fs.readFile('./views/nores.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
-				        var options = {
-				            host: 'localhost',
-							port: '3000',
-							path: '/fahrt/'+req.params.id,
-							method: 'PUT'
-							}
-				        }
+									var newFahrt =JSON.stringify(req.body);
+									console.log(newFahrt);
 
-						var externalReques = http.request(options, function(externalResponse){
-						    console.log('New Fahrt added');
-                            externalResponse.on("data", function(chunk) {
+			  								if (err){
+					  							throw err;
+												} else {
+								        var options = {
+								            host: 'localhost',
+								            port: '3000',
+								            path: '/fahrten/'+req.params.id,
+								            method: 'PUT',
+														headers: {
+            									accept:"application/json"
+        										}
+								          }
+												}
 
-				            console.log("body: " + chunk);
-                            var html = ejs.render(filestring, {message:message});
-							
-                            res.setHeader('content-type', 'text/html');										res.writeHead(200);
-				            res.write(newFahrt);
-							res.end();
-							});
-				        });
-						
-                        externalRequest.setHeader("content-type", "application/json");
-				    	externalRequest.write(JSON.stringify(newFahrt));
-				    	console.log(newFahrt + "post new Fahrt");
-				    	externalRequest.end();
-            });
+												var externalRequest = http.request(options, function(externalResponse){
+													console.log('Fahrt put');
+													externalResponse.on("data", function(chunk) {
+														console.log("body: " + chunk);
+														});
+												});
+												externalRequest.setHeader("content-type", "application/json");
+					 							externalRequest.write(JSON.stringify(req.body));
+					 							console.log("Fahrtdate überarbeitet");
+					 							externalRequest.end();
+			});
 	 });
 
-
 //Fahrt erstellen
-app.get("/fahrten", jsonParser, function(req, res){
+app.post("/fahrten", jsonParser, function(req, res){
 	fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+										var message;
 
-                    var newFahrt = {
-				        "start": req.query.start,
-						"ziel": req.query.ziel,
-						"plaetze": req.query.plaetze,
-						"u_id": req.query.u_id
-						};
-                    
-					if (err){
-						 throw err;
-					} else {
+											 var newFahrt = JSON.stringify(req.body);
+											 console.log(newFahrt);
+											if (err){
+						 						throw err;
+											} else {
 
-					   var options = {
-                           host: 'localhost',
-                           port: '3000',
-                           paht: '/fahrten',
-				           method: "POST",
-				           headers: {
-                               accept: "application/json",
-                               "Content-Type": "application/json",
-                               "Content-Length": Buffer.byteLength(newFahrt)
-                           }
-				        }
-				    }
-					
-                    console.log(newFahrt);
-                    
-					var externalRequest = http.request(options, function(externalResponse){
+					   							var options = {
+                           	host: 'localhost',
+                           	port: '3000',
+                           	paht: '/fahrten',
+				           				 	method: "POST"
+				        					}
+				    						}
+
+                    	console.log(newFahrt);
+
+											var externalRequest = http.request(options, function(externalResponse){
                             console.log('Fahrt hinzufügen');
-							externalResponse.on("data", function(chunk) {
-								console.log("body: " + chunk);
-							
+															externalResponse.on("data", function(chunk) {
+																	console.log(chunk);
+																	message = chunk;
+																	console.log(message);
+
                                 var html = ejs.render(filestring, {message:message});
-								res.setHeader('content-type', 'text/html');
-								res.writeHead(200);
-								res.write(html);
-								res.end();
-                            });
-				    });
+																res.setHeader('content-type', 'text/html');
+																res.writeHead(200);
+																res.write(html);
+																res.end();
+                            	});
+				    						});
 
-					externalRequest.setHeader("content-type", "application/json");
-			     	externalRequest.write(JSON.stringify(newFahrt));
-			     	console.log(newFahrt + "post new Fahrt");
-			     	externalRequest.end();
-	});
-});
-
-/*//Fahrt erstellen TEsST
-app.post("/fahrten", function(req, res){
-	fs.readFile('./views/newfahrt.ejs', {encoding: 'utf-8'}, function(err, filestring){
-
-				    var body =JSON.stringify(req.body);
-					console.log(body);
-					
-                    var newFahrt = {
-					   "start": body.start,
-					   "ziel": body.ziel,
-				       "plaetze": body.plaetze,
-                       "u_id": req.params.u_id
-				    };
-
-					console.log(newfahrt);
-
-					if (err){
-						 throw err;
-					} else {
-
-						var options = {
-								host: 'localhost',
-								port: '3000',
-                                paht: '/users',
-								method: "POST",
-								headers: {
-									accept: "application/json",
-									"Content-Type": "application/json",
-									"Content-Length": Buffer.byteLength(newFahrt)
-									}
-				        }
-				    }
-
-					var externalRequest = http.request(options, function(externalResponse){
-                        console.log('new Fahrt added');
-						externalResponse.on("data", function(chunk) {
-							console.log("body: " + chunk);
-						});
-				    });
-					externalRequest.write(newFahrt);
-					externalRequest.end();
-	});
-});
-*/
+												externalRequest.setHeader("content-type", "application/json");
+      									externalRequest.write(JSON.stringify(req.body));
+			     							console.log("post new Fahrt");
+			     							externalRequest.end();
+					});
+				});
 
 
 	//Fahrt löschen(OK)
@@ -561,30 +526,30 @@ app.post("/fahrten", function(req, res){
 					var message="";
 
                     if (err){
-						throw err;
-					} else {
-					    var options = {
-					           host: 'localhost',
-					           port: '3000',
-					           path: '/fahrt/'+req.params.id,
-					           method: 'DELETE'
-					   }
-					}
+												throw err;
+										} else {
+					    					var options = {
+					           				host: 'localhost',
+					           				port: '3000',
+					           				path: '/fahrt/'+req.params.id,
+					           				method: 'DELETE'
+					   						}
+											}
 
-					var externalRequest = http.request(options, function(externalResponse){
+											var externalRequest = http.request(options, function(externalResponse){
                             console.log('Fahrt löschen');
-							externalResponse.on("data", function(chunk) {
-								console.log("body: " + chunk);
-								message=chunk;
+														externalResponse.on("data", function(chunk) {
+																console.log("body: " + chunk);
+																message=chunk;
 
-							    var html = ejs.render(filestring, {message:message});
-							    res.setHeader('content-type', 'text/html');
-							    res.writeHead(200);
-							    res.write(html);
-							    res.end();
-							});
-				    });
-					externalRequest.end();
+							    							var html = ejs.render(filestring, {message:message});
+							    							res.setHeader('content-type', 'text/html');
+							    							res.writeHead(200);
+							    							res.write(html);
+							    							res.end();
+															});
+				    						});
+												externalRequest.end();
             });
         });
 

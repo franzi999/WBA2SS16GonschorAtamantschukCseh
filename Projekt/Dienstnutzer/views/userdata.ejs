@@ -4,26 +4,6 @@
     <title> Mitfahrgelegenheit</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
-    <!--<script type="text/javascript">
-      function deleteFahrt(id) {
-        alert(id);
-        $.ajax({
-           host: 'localhost',
-           port: 3001,
-           url: '/fahrtdel/' + id,
-           type: 'DELETE',
-           success: function(data){
-             if(data==404) alert("Fehler");
-             else {
-               alert("Fahrt gelöscht");
-               window.location.href = 'http://localhost:3001/success';
-             }
-           }
-       });
-     };
-   </script>-->
 </head>
 <header>
     <ul id="head">
@@ -41,12 +21,12 @@
 
             <ul id="udlist">
 
-                <li>Name: <%= u.nachname%> </li><br>
-                <li>Vorname: <%= u.vorname %> </li><br>
-                <li>Email: <%= u.email %> </li><br>
-                <li>Telefon: <%= u.tel %> </li><br>
-                <li>Handy: <%= u.mobil %> </li><br>
-                <li>Fahrzeug: <%= u.car %> </li><br>
+                <li>Name: <%= user.nachname%> </li><br>
+                <li>Vorname: <%= user.vorname %> </li><br>
+                <li>Email: <%= user.email %> </li><br>
+                <li>Telefon: <%= user.tel %> </li><br>
+                <li>Handy: <%= user.mobil %> </li><br>
+                <li>Fahrzeug: <%= user.car %> </li><br>
 
             </ul>
 

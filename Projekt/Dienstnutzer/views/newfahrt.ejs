@@ -2,8 +2,7 @@
 <html>
 <head>
     <title> Mitfahrgelegenheit</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">s
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <header>
     <ul id="head">
@@ -17,7 +16,7 @@
 <body>
     <div id="mser">
         <div id="dnew">
-          <form id="ser" action="http://localhost:3001/fahrten" method="GET">
+          <form id="ser" action="http://localhost:3001/fahrten" method="POST">
               <p>Geben Sie die Fahrt ein</p>
               <p>Ihre Benutzer-ID: <%= u_id %></p>
               <label class="ser" for="start">Start</label><br>
