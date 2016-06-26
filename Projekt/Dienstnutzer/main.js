@@ -260,7 +260,7 @@ app.get('/user/:id', jsonParser, function (req, res) {
 		    });
 
 
-				app.get('/fahrt/:id', jsonParser, function (req, res) {
+				app.get('/fahrten/:id', jsonParser, function (req, res) {
 
 				          var options = {
 				            host: 'localhost',
@@ -552,6 +552,39 @@ app.post("/fahrten", jsonParser, function(req, res){
 												externalRequest.end();
             });
         });
+
+				//Fahrt löschen(zweite variante)
+			    app.delete('/fahrt/:id', jsonParser, function (req, res) {
+			        fs.readFile('./views/message.ejs', {encoding: 'utf-8'}, function(err, filestring){
+								var message="";
+
+			                    if (err){
+															throw err;
+													} else {
+								    					var options = {
+								           				host: 'localhost',
+								           				port: '3000',
+								           				path: '/fahrt/'+req.params.id,
+								           				method: 'DELETE'
+								   						}
+														}
+
+														var externalRequest = http.request(options, function(externalResponse){
+			                            console.log('Fahrt löschen');
+																	externalResponse.on("data", function(chunk) {
+																			console.log("body: " + chunk);
+																			message=chunk;
+
+										    							var html = ejs.render(filestring, {message:message});
+										    							res.setHeader('content-type', 'text/html');
+										    							res.writeHead(200);
+										    							res.write(html);
+										    							res.end();
+																		});
+							    						});
+															externalRequest.end();
+			            });
+			        });
 
 
 

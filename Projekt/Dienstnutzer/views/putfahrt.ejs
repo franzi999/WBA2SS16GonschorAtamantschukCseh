@@ -8,14 +8,15 @@
     $(function(){
       $("#sub").click(function(event) {
         //Abschicken und Seite neu laden unterbinden
+        alert('in put '+ fahrtID);
         event.preventDefault();
         var fahrt=[];
         var u_id;
-
+        alert("fahrt holen");
         $.ajax({
           type: 'GET',
           host: 'localhost',
-          url: '/fahrt/' + <%= fahrtID %> ,
+          url: '/fahrten/' + <%= fahrtID %> ,
           data:{start: 'val1',
                 ziel: 'val2',
                 plaetze: 'val3',
@@ -35,6 +36,7 @@
         plaetze: $("#plaetze").val(),
         u_id: u_id
         };
+        alert("fahrt puten");
         $.ajax({
           type: 'PUT',
           host: 'localhost',

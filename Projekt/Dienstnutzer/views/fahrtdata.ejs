@@ -6,32 +6,45 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
-      $("#buch").submit(function(event) {
-        //Abschicken und Seite neu laden) unterbinden
+    $(function(){
+      $("#sub").click(function(event) {
+        alert('buchen');
+        //Abschicken und Seite neu laden unterbinden
         event.preventDefault();
+        neuP = <%= fahrt.plaetze%>;
+        alert(neuP);
+        neuP -= 1;
+        alert(neuP);
         var newFahrt = {
-          start: <%= fahrt.start%>,
-          ziel: <%= fahrt.ziel%>,
-          plaetze: <%= fahrt.plaetze - 1 %>,
-          u_id: <%= fahrt.u_id%>,
+        start: '<%= fahrt.start%>',
+        ziel: '<%= fahrt.ziel%>',
+        plaetze: neuP,
+        u_id: '<%= fahrt.u_id%>'
         };
-        alert("koko");
         $.ajax({
           type: 'PUT',
           host: 'localhost',
-          url: '/fahrt/'+ <%= fahrt.id %>,
+          url: '/fahrt/' + <%= fahrt.id %> ,
           contentType: 'application/json',
-          data: JSON.stringify(newFahrt)
-        }).done(function (data) {
-          // Bei Erfolg
-            window.location.href = 'http://localhost:3001/message'
-            alert("Erfolgreich:" + data);
-        }).fail(function() {
-          // Bei Fehler
-            alert("Fehler!");
-        }).always(function() {
-            // Immer
-            alert("Beendet!");
+          data: JSON.stringify(newFahrt),
+          success: function(newFahrt){
+            console.log(JSON.stringify(newFahrt));
+            window.location = "http://localhost:3001/search";
+          }
+        });
+        alert("fahrt löschen?")
+        if (neuP == 0){
+          alert("fahrt wird gelöscht")
+          $.ajax({
+            type: 'DELETE',
+            host: 'localhost',
+            url: '/fahrt/' + <%= fahrt.id %> ,
+            contentType: 'application/json',
+            success: function(){
+              alert('fahrt geloescht');
+            }
+          });
+        }
         });
       });
     </script>
@@ -70,7 +83,7 @@
             <form id="buch">
                 <label class="ser" for="mail">Ihre Email</label><br>
                 <input type="text" id="mail" name="mail">
-                <input type="submit" name="submit" value="buchen">
+                <input type="submit" id="sub" name="ko" value="buchen">
             </form>
         </div>
     </div>
