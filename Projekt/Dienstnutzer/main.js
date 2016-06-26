@@ -92,7 +92,7 @@ app.get('/user/:id', jsonParser, function (req, res) {
 								        var options = {
 								            host: 'localhost',
 								            port: '3000',
-								            path: '/users/'+req.body.id,
+								            path: '/users/'+req.params.id,
 								            method: 'PUT',
 														headers: {
             									accept:"application/json"
@@ -116,7 +116,6 @@ app.get('/user/:id', jsonParser, function (req, res) {
 
                 //User erstellen
                 app.post("/users", function(req, res){
-                  fs.readFile('./views/newFahrt.ejs', {encoding: 'utf-8'}, function(err, filestring){
                                      var u_id;
 
                                      var newUser =JSON.stringify(req.body);
@@ -129,7 +128,7 @@ app.get('/user/:id', jsonParser, function (req, res) {
                                          host: 'localhost',
                                          port: '3000',
                                          paht: '/users',
-                                         method: "POST"
+                                         method: 'POST'
                                        }
                                      }
 
@@ -139,17 +138,14 @@ app.get('/user/:id', jsonParser, function (req, res) {
                                                console.log("body: " + chunk);
                                                u_id = JSON.parse(chunk);
 
-																							var html = ejs.render(filestring, {u_id:u_id});
 				 																			res.setHeader('content-type', 'text/html');
 				 																			res.writeHead(200);
-				 																			res.write(html);
 				 																			res.end();
                                        });
                                      });
 																		 externalRequest.setHeader("content-type", "application/json");
  																	 	 externalRequest.write(JSON.stringify(req.body));
  																	 	 externalRequest.end();
-                  });
                 });
 
 
@@ -192,7 +188,7 @@ app.get('/user/:id', jsonParser, function (req, res) {
 		app.get('/userdata', jsonParser, function (req, res) {
 		    fs.readFile('./views/userdata.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
-					var user = [];
+					var user=[];
 					var userFahrten = [];
 					var nores="";
 
@@ -221,41 +217,47 @@ app.get('/user/:id', jsonParser, function (req, res) {
 
 		              var user = JSON.parse(chunk);
 									console.log(user);
-								});
-							});
 
-							var externalRequestTwo = http.request(fahrtoptions, function(externalResponse){
-		            console.log('UserFahrten Holen');
-		            externalResponse.on('data', function(chunk) {
+									console.log(Object.keys(user).length);
+									if (Object.keys(user).length == 0) {
+												res.render('nores.ejs');
+												res.end();
+									}else{
+										var externalRequestTwo = http.request(fahrtoptions, function(externalResponse){
+				            console.log('UserFahrten Holen');
+				            externalResponse.on('data', function(chunk) {
 
-		              var fahrten = JSON.parse(chunk);
-									var userFahrten = [];
+				              var fahrten = JSON.parse(chunk);
+											var userFahrten = [];
 
-									fahrten.forEach(function(fahrt){
+											fahrten.forEach(function(fahrt){
 
-										if(fahrt.u_id == req.query.id){
-											userFahrten.push(fahrt);
-											console.log(fahrt);
-										}
+												if(fahrt.u_id == req.query.id){
+													userFahrten.push(fahrt);
+													console.log(fahrt);
+												}
+											});
+											console.log();
+											console.log(userFahrten);
+
+											 	if(Object.keys(userFahrten).length == 0) {
+											    	console.log('nores wird ausgegeben');
+														nores="Keine Fahrten"
+												}
+				              		var html = ejs.render(filestring, {"user":user , userFahrten:userFahrten, nores:nores});
+				              		res.setHeader('content-type', 'text/html');
+				              		res.writeHead(200);
+				              		res.write(html);
+				              		res.end();
+										});
 									});
-									console.log();
-									console.log(userFahrten);
+									externalRequestTwo.end();
+									externalRequestOne.end();
+								}
 
-									if (Object.keys(userFahrten).length == 0) {
-									    console.log('nores wird ausgegeben');
-											nores="Keine Fahrten"
-									}
-
-		              var html = ejs.render(filestring, {"user":user , userFahrten:userFahrten, nores:nores});
-		              res.setHeader('content-type', 'text/html');
-		              res.writeHead(200);
-		              res.write(html);
-		              res.end();
 								});
 							});
-
 		          externalRequestOne.end();
-							externalRequestTwo.end();
 		      });
 		    });
 

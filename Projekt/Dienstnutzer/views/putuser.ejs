@@ -4,22 +4,22 @@
     <title> Mitfahrgelegenheit</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
+    <script src="/js/jquery" type="text/javascript"></script>
     <script>
     $(function(){
-      $("#sub").click(function(event) {
-        alert("Put ++++++++");
+      $("#putu").click(function(event) {
         //Abschicken und Seite neu laden unterbinden
-        //event.preventDefault();
+        event.preventDefault();
         var newUser = {
           vorname: $("#vorname").val(),
           nachname: $("#nachname").val(),
           tel: $("#tel").val(),
           mobil: $("#mobil").val(),
           mail: $("#email").val(),
-          car: $("#car").val(),
-          id: <%= userID %>
+          car: $("#car").val()
         };
+        alert("user puten");
+        alert(<%= userID %>);
         $.ajax({
           type: 'PUT',
           host: 'localhost',
@@ -27,14 +27,13 @@
           contentType: 'application/json',
           data: JSON.stringify(newUser),
           success: function(newUser){
-            alert('success');
+            alert('User aktualiesiert');
             console.log(JSON.stringify(newUser));
           }
         });
       });
     });
-    </script>
-
+  </script>
 </head>
 <header>
     <ul id="head">
@@ -65,7 +64,7 @@
               <input type="text" id="email" name="email"><br>
               <label class="ser" for="car">Fahrzeug</label><br>
               <input type="text" id="car" name="car"><br>
-              <input type="submit" id="sub" name="submit" value="Speichern">
+              <input type="submit" id="putu" name="submit" value="Speichern">
           </form>
         </div>
     </div>

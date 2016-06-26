@@ -31,8 +31,8 @@
             </ul>
 
             <form>
-                <input type="button" name="submit" onclick="location.href='http://localhost:3001/putuser/24'" value="Ändern">
-                <input type="button" name="submit" onclick="location.href='http://localhost:3001/userdel/24'" value="Löschen">
+                <input type="button" name="submit" onclick="location.href='http://localhost:3001/putuser/<%= user.id %>'" value="Ändern">
+                <input type="button" name="submit" onclick="location.href='http://localhost:3001/userdel/<%= user.id %>'" value="Löschen">
             </form>
         </div>
         <div class="trenner">

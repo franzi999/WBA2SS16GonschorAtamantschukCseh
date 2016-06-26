@@ -6,37 +6,18 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script>
     $(function(){
-      $("#sub").click(function(event) {
+      $("#putf").click(function(event) {
         //Abschicken und Seite neu laden unterbinden
-        alert('in put '+ fahrtID);
         event.preventDefault();
-        var fahrt=[];
-        var u_id;
-        alert("fahrt holen");
-        $.ajax({
-          type: 'GET',
-          host: 'localhost',
-          url: '/fahrten/' + <%= fahrtID %> ,
-          data:{start: 'val1',
-                ziel: 'val2',
-                plaetze: 'val3',
-                u_id: 'val4'
-                },
-          dataType: 'json',
-          success: function(data){
-            alert(data);
-            u_id = data.u_id;
-            alert('U_id: 'u_id);
-            console.log(JSON.stringify(data));
-          }
-        });
         var newFahrt = {
-        start: $("#start").val(),
-        ziel: $("#ziel").val(),
-        plaetze: $("#plaetze").val(),
-        u_id: u_id
+          start: $("#start").val(),
+          ziel: $("#ziel").val(),
+          plaetze: $("#plaetze").val(),
+          u_id: $("#sp").text()
         };
         alert("fahrt puten");
+        alert(newFahrt.u_id);
+
         $.ajax({
           type: 'PUT',
           host: 'localhost',
@@ -44,13 +25,13 @@
           contentType: 'application/json',
           data: JSON.stringify(newFahrt),
           success: function(newFahrt){
-            alert('success');
+            alert('Fahrt aktualiesiert');
             console.log(JSON.stringify(newFahrt));
           }
         });
       });
     });
-    </script>
+  </script>
 </head>
 <header>
     <ul id="head">
@@ -66,7 +47,7 @@
         <div id="dputf">
           <p>Fahrtdaten</p>
           <ul class="list">
-              <li>Ihre ID: <%= fahrtID %> </li><br>
+              <li style="color: #666464; display: none;">Ihre ID: <span id="sp" style="color: #666464;"><%= fahrtID %></span> </li><br>
           </ul>
           <form id="ser">
             <label class="ser" for="start">Start</label><br>
@@ -75,7 +56,7 @@
             <input type="text" id="ziel" name="ziel"><br>
             <label class="ser" for="plaetze">Plätze</label><br>
             <input type="text" id="plaetze" name="plaetze"><br>
-            <input type="submit" id="sub" name="submit" value="Speichern">
+            <input type="submit" id="putf" name="submit" value="Speichern">
           </form>
         </div>
     </div>
@@ -83,5 +64,4 @@
     Copyright Igelex
 </footer>
 </body>
-
 </html>

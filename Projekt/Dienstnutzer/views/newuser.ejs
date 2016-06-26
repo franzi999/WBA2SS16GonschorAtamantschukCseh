@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
     $(function(){
-      $("#sub").click(function(event) {
+      $("#new").click(function(event) {
         alert("New ++++++++");
         //Abschicken und Seite neu laden unterbinden
         event.preventDefault();
@@ -60,12 +60,12 @@
               <input type="text" id="email" name="email"><br>
               <label class="ser" for="car">Fahrzeug</label><br>
               <input type="text" id="car" name="car"><br>
-              <input type="submit" id="sub" name="submit" value="Speichern">
+              <input type="submit" id="new" name="submit" value="Speichern">
           </form>
           <form id="weiter">
               <label class="ser" for="mail">Oder Ihre ID eingeben</label><br>
               <input type="text" id="mail" name="u_id">
-              <input type="button" onclick="location.href='http://localhost:3001/newfahrt/10'" value="Weiter">
+              <input type="button" onclick="getForm()" value="Weiter">
           </form>
 
         </div>
@@ -73,6 +73,12 @@
 <footer>
     Copyright Igelex
 </footer>
+<script type="text/javascript">
+  function getForm(){
+    var id = document.getElementById('mail').value;
+    document.location.href = 'http://localhost:3001/newfahrt/' + id;
+  }
+</script>
 </body>
 
 </html>
