@@ -62,8 +62,7 @@ app.get('/users/:id', function(req, res){
             res.type('json').send(rep);
         }
         else{
-            res.status(404).type('text').send('User '+ req.params.id+
-                                        ' existiert nicht');
+            res.status(404).type('text').send(rep);
         }
     });
 });
