@@ -99,10 +99,22 @@ app.put('/users/:id', jsonParser, function(req, res){
             var neu = req.body;
             neu.id = req.params.id;
 
-            client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
-                res.status(200).type('json').send(neu);
-            });
+            client.exists('user:'+ req.params.id, function(err, rep) {
+              if(rep == 1){
+                client.set('user:'+req.params.id, JSON.stringify(neu),  function(err, rep){
+                  if(err){
+                    res.status(404).type('text').send('User '+ req.params.id+
+                                                ' kann nicht geändert werden');
+                  } else{
+                      res.status(200).type('json').send('User '+ req.params.id+
+                                                  ' aktualiesiert');
+                    }
+                });
+              } else {
+                  res.status(404).type('text').send('User existiert nicht');
+              }
 
+            });
 });
 //########################################################################USERS
 
@@ -119,14 +131,14 @@ app.post('/fahrten',function(req, res){
               res.status(404).type('text').send('Die Fahrt' + newFahrt.id + 'konnte nicht gepostet werde');
           }
           else {
-              res.status(200).type('text').send('Die Fahrt '+ newFahrt.id + ' gepostet');
+              res.status(200).type('text').send(newFahrt);
           }
         });
     });
 });
 
 
-app.delete('/fahrt/:id', function(req, res){
+app.delete('/fahrten/:id', function(req, res){
     client.del('fahrt:'+req.params.id, function(err, rep) {
         if (rep == 1) {
             res.status(200).type('text').send('Die Fahrt '+ req.params.id + ' gelöscht');
@@ -221,10 +233,22 @@ app.put('/fahrten/:id', jsonParser, function(req, res){
             var newFahrt = req.body;
             newFahrt.id = req.params.id;
 
-            client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
-                res.status(200).type('json').send('Fahrt geändert');
-            });
+            client.exists('fahrt:'+ req.params.id, function(err, rep) {
+              if(rep == 1){
+                client.set('fahrt:'+req.params.id, JSON.stringify(newFahrt),  function(err, rep){
+                  if(err){
+                    res.status(404).type('text').send('Fahrt '+ req.params.id+
+                                                ' kann nicht geändert werden');
+                  } else{
+                      res.status(200).type('json').send('Fahrt '+ req.params.id+
+                                                  ' aktualiesiert');
+                    }
+                });
+              } else {
+                  res.status(404).type('text').send('Fahrt existiertnicht');
+              }
 
+            });
 });
 
 //FAHRT########################################################################
