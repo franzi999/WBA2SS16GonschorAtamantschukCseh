@@ -9,25 +9,48 @@
       $("#putf").click(function(event) {
         //Abschicken und Seite neu laden unterbinden
         event.preventDefault();
-        var newFahrt = {
-          start: $("#start").val(),
-          ziel: $("#ziel").val(),
-          plaetze: $("#plaetze").val(),
-          u_id: $("#sp").text()
-        };
-        alert("fahrt puten");
-        alert(newFahrt.u_id);
-
+        alert('in get');
+        var uid;
         $.ajax({
-          type: 'PUT',
+          type: 'GET',
           host: 'localhost',
-          url: '/fahrt/' + <%= fahrtID %> ,
-          contentType: 'application/json',
-          data: JSON.stringify(newFahrt),
-          success: function(newFahrt){
-            alert('Fahrt aktualiesiert');
-            console.log(JSON.stringify(newFahrt));
-          }
+          url: '/fahrten/' + <%= fahrtID %> ,
+          success: function(data){
+            var uid=data.u_id;
+            if (uid) {}
+
+              var newFahrt = {
+                start: $("#start").val(),
+                ziel: $("#ziel").val(),
+                plaetze: $("#plaetze").val(),
+                u_id: uid
+              };
+              alert("fahrt puten");
+
+              $.ajax({
+                type: 'PUT',
+                host: 'localhost',
+                url: '/fahrten/' + <%= fahrtID %> ,
+                contentType: 'application/json',
+                data: JSON.stringify(newFahrt),
+                success: function(data){
+                  $('#mel').html(data);
+                  alert('Fahrt aktualiesiert');
+                  $('#overlay').fadeIn(400,
+                    function(){
+                      $('#modal_form')
+                        .css('display', 'block')
+                        .animate({opacity: 1, top: '50%'}, 200);
+                    });
+                    $('#modal_close, #overlay').click( function(){
+                      window.location.href='http://localhost:3001';
+                    });
+                },
+                error: function(xhr, options, e) {
+          			$('#mel').html(e);
+              }
+              });
+            }
         });
       });
     });
@@ -60,6 +83,17 @@
           </form>
         </div>
     </div>
+
+    <!-- FENSTER -->
+
+    <div id="modal_form">
+          <span id="modal_close">X</span>
+                <p id="mel">
+                    Meldung
+                </p>
+    </div>
+    <div id="overlay"></div>
+
 <footer>
     Copyright Igelex
 </footer>

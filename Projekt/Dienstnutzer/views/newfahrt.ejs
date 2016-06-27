@@ -3,6 +3,46 @@
 <head>
     <title> Mitfahrgelegenheit</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+      $("#newf").click(function(event) {
+        alert("New ++++++++");
+        //Abschicken und Seite neu laden unterbinden
+        event.preventDefault();
+        var newFahrt = {
+          start: $("#start").val(),
+          ziel: $("#ziel").val(),
+          plaetze: $("#plaetze").val(),
+          u_id: $("#u_id").val()
+        };
+        $.ajax({
+          type: 'POST',
+          host: 'localhost',
+          url: '/fahrten',
+          contentType: 'application/json',
+          data: JSON.stringify(newFahrt),
+          success: function(data){
+
+            //window.location.href='http://localhost:3001/newfahrt/'+u;
+            alert('success');
+            $('#overlay').fadeIn(400,
+              function(){
+                $('#modal_form')
+                  .css('display', 'block')
+                  .animate({opacity: 1, top: '50%'}, 200);
+              });
+              $('#modal_close, #overlay').click( function(){
+                window.location.href='http://localhost:3001';
+              });
+          },
+          error: function(xhr, options, e) {
+    			$('#u').html(e);
+        }
+        });
+      });
+    });
+    </script>
 </head>
 <header>
     <ul id="head">
@@ -16,7 +56,7 @@
 <body>
     <div id="mser">
         <div id="dnew">
-          <form id="ser" action="http://localhost:3001/fahrten" method="POST">
+          <form id="ser">
               <p>Geben Sie die Fahrt ein</p>
               <p>Ihre Benutzer-ID: <%= u_id %></p>
               <label class="ser" for="start">Start</label><br>
@@ -27,10 +67,21 @@
               <input type="text" id="plaetze" name="plaetze" required><br>
               <label class="ser" for="u_id">Benutzer_ID</label><br>
               <input type="text" id="u_id" name="u_id" required><br>
-              <input type="submit" name="submit" value="Speichern">
+              <input type="submit" id="newf" name="submit" value="Speichern">
           </form>
         </div>
     </div>
+
+    <!-- FENSTER -->
+
+    <div id="modal_form">
+          <span id="modal_close">X</span>
+                <p id="mel">
+                    Neue Fahrt erfolgreich erstellt
+                </p>
+    </div>
+    <div id="overlay"></div>
+
 <footer>
     Copyright Igelex
 </footer>

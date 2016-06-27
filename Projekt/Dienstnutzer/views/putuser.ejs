@@ -15,20 +15,32 @@
           nachname: $("#nachname").val(),
           tel: $("#tel").val(),
           mobil: $("#mobil").val(),
-          mail: $("#email").val(),
+          email: $("#email").val(),
           car: $("#car").val()
         };
         alert("user puten");
-        alert(<%= userID %>);
+
         $.ajax({
           type: 'PUT',
           host: 'localhost',
-          url: '/user/' + <%= userID %> ,
+          url: '/users/' + <%= userID %> ,
           contentType: 'application/json',
           data: JSON.stringify(newUser),
-          success: function(newUser){
-            alert('User aktualiesiert');
-            console.log(JSON.stringify(newUser));
+          success: function(data){
+            alert(data);
+            $('#mel').html(data);
+            $('#overlay').fadeIn(400,
+              function(){
+                $('#modal_form')
+                  .css('display', 'block')
+                  .animate({opacity: 1, top: '50%'}, 200);
+              });
+              $('#modal_close, #overlay').click( function(){
+                window.location.href='http://localhost:3001';
+              });
+          },
+          error: function(xhr, options, e) {
+    			$('#mel').html(e);
           }
         });
       });
@@ -68,6 +80,17 @@
           </form>
         </div>
     </div>
+
+    <!-- FENSTER -->
+
+    <div id="modal_form">
+          <span id="modal_close">X</span>
+                <p id="mel">
+                    Meldung
+                </p>
+    </div>
+    <div id="overlay"></div>
+
 <footer>
     Copyright Igelex
 </footer>

@@ -4,6 +4,7 @@
     <title> Mitfahrgelegenheit</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 </head>
 <header>
     <ul id="head">
@@ -26,13 +27,14 @@
                 <li>Email: <%= user.email %> </li><br>
                 <li>Telefon: <%= user.tel %> </li><br>
                 <li>Handy: <%= user.mobil %> </li><br>
-                <li>Fahrzeug: <%= user.car %> </li><br>
+                <li>Fahrzeug: <%= user.car %> </li>
+                <span style="display:none;" id="uid"><%= user.id %> </span><br>
 
             </ul>
 
             <form>
                 <input type="button" name="submit" onclick="location.href='http://localhost:3001/putuser/<%= user.id %>'" value="Ändern">
-                <input type="button" name="submit" onclick="location.href='http://localhost:3001/userdel/<%= user.id %>'" value="Löschen">
+                <input type="button" name="submit" id="delu" value="Löschen">
             </form>
         </div>
         <div class="trenner">
@@ -44,16 +46,90 @@
                   <ul class="list">
                       <li>Start: <%= fahrt.start%> </li><br>
                       <li>Ziel: <%= fahrt.ziel %> </li><br>
-                      <li>Plaetze: <%= fahrt.plaetze %> </li><br>
+                      <li>Plaetze: <%= fahrt.plaetze %> </li>
+                      <li style="display:none;" id="fid"><%= fahrt.id %> </li><br>
                   </ul>
                       <input type="button" name="submit" onclick="location.href='http://localhost:3001/putfahrt/<%= fahrt.id %>'" value="Ändern">
-                      <input type="button" name="submit" onclick="location.href='http://localhost:3001/fahrtdel/<%= fahrt.id %>'" value="Löschen">
+                      <input type="button" name="submit" id="delf" value="Löschen">
               </div>
+              <script type="text/javascript">
+              $(function(){
+              $("#delf").click(function(event) {
+                alert("Fahrt löschen");
+                alert(<%= fahrt.id %>);
+                //Abschicken und Seite neu laden unterbinden
+                event.preventDefault();
+                $.ajax({
+                  type: 'DELETE',
+                  host: 'localhost',
+                  url: '/fahrten/'+ <%= fahrt.id %>,
+                  contentType: 'application/json',
+                  success: function(data){
+                    $('#mel').html(data);
+                    $('#overlay').fadeIn(400,
+                      function(){
+                        $('#modal_form')
+                          .css('display', 'block')
+                          .animate({opacity: 1, top: '50%'}, 200);
+                      });
+                    $('#modal_close, #overlay').click( function(){
+                      location.reload();
+                    });
+                  },
+                  error: function(xhr, options, e) {
+                  $('#mel').html(e);
+                  }
+                });
+              });
+            });
+              </script>
               <% }); %>
     </div>
+
+    <!-- FENSTER -->
+
+    <div id="modal_form">
+          <span id="modal_close">X</span>
+                <p id="mel">
+                    Meldung hier
+                </p>
+    </div>
+    <div id="overlay"></div>
 <footer>
     Copyright Igelex
 </footer>
+<script type="text/javascript">
+$(function(){
+  $("#delu").click(function(event) {
+    alert("Delete User");
+    //Abschicken und Seite neu laden unterbinden
+    event.preventDefault();
+    $.ajax({
+      type: 'DELETE',
+      host: 'localhost',
+      url: '/users/'+ <%= user.id %>,
+      contentType: 'application/json',
+      success: function(data){
+        alert(data);
+
+        $('#mel').html(data);
+        $('#overlay').fadeIn(400,
+          function(){
+            $('#modal_form')
+              .css('display', 'block')
+              .animate({opacity: 1, top: '50%'}, 200);
+          });
+          $('#modal_close, #overlay').click( function(){
+            window.location.href='http://localhost:3001';
+          });
+      },
+      error: function(xhr, options, e) {
+      $('#mel').html(e);
+      }
+    });
+  });
+});
+</script>
 </body>
 
 </html>

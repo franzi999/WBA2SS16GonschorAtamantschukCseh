@@ -7,44 +7,40 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
     $(function(){
-      $("#sub").click(function(event) {
+      $("#buch").click(function(event) {
         alert('buchen');
         //Abschicken und Seite neu laden unterbinden
         event.preventDefault();
         neuP = <%= fahrt.plaetze%>;
-        alert(neuP);
         neuP -= 1;
-        alert(neuP);
+
         var newFahrt = {
-        start: '<%= fahrt.start%>',
-        ziel: '<%= fahrt.ziel%>',
-        plaetze: neuP,
-        u_id: '<%= fahrt.u_id%>'
+          start: '<%= fahrt.start%>',
+          ziel: '<%= fahrt.ziel%>',
+          plaetze: neuP,
+          u_id: '<%= fahrt.u_id%>'
         };
         $.ajax({
           type: 'PUT',
           host: 'localhost',
-          url: '/fahrt/' + <%= fahrt.id %> ,
+          url: '/fahrten/' + <%= fahrt.id %> ,
           contentType: 'application/json',
           data: JSON.stringify(newFahrt),
           success: function(newFahrt){
-            console.log(JSON.stringify(newFahrt));
-            window.location = "http://localhost:3001/search";
+            $('#overlay').fadeIn(400,
+              function(){
+                $('#modal_form')
+                  .css('display', 'block')
+                  .animate({opacity: 1, top: '50%'}, 200);
+              });
+              $('#modal_close, #overlay').click( function(){
+                window.location = "http://localhost:3001/search";
+              });
+          },
+          error: function(xhr, options, e) {
+          $('#mel').html(e);
           }
         });
-        alert("fahrt löschen?")
-        if (neuP == 0){
-          alert("fahrt wird gelöscht")
-          $.ajax({
-            type: 'DELETE',
-            host: 'localhost',
-            url: '/fahrt/' + <%= fahrt.id %> ,
-            contentType: 'application/json',
-            success: function(){
-              alert('fahrt geloescht');
-            }
-          });
-        }
         });
       });
     </script>
@@ -83,10 +79,22 @@
             <form id="buch">
                 <label class="ser" for="mail">Ihre Email</label><br>
                 <input type="text" id="mail" name="mail">
-                <input type="submit" id="sub" name="ko" value="buchen">
+                <input type="submit" id="buch" name="ko" value="buchen">
             </form>
         </div>
     </div>
+
+    <!-- FENSTER -->
+
+    <div id="modal_form">
+          <span id="modal_close">X</span>
+                <p id="mel">
+                    Fahrt wurde gebucht! <br>
+                    Sie kriegen eine Bestätigung per Email <br>
+                </p>
+    </div>
+    <div id="overlay"></div>
+
 <footer>
     Copyright Igelex
 </footer>

@@ -16,7 +16,7 @@
           nachname: $("#nachname").val(),
           tel: $("#tel").val(),
           mobil: $("#mobil").val(),
-          mail: $("#email").val(),
+          email: $("#email").val(),
           car: $("#car").val()
         };
         $.ajax({
@@ -25,13 +25,28 @@
           url: '/users',
           contentType: 'application/json',
           data: JSON.stringify(newUser),
-          success: function(newUser){
+          success: function(data){
+            var u = data;
+            $('#u').html(u.id);
             alert('success');
-            console.log(JSON.stringify(newUser));
-          }
+            //fenster einblenden
+            $('#overlay').fadeIn(400,
+              function(){
+                $('#modal_form')
+                  .css('display', 'block')
+                  .animate({opacity: 1, top: '50%'}, 200);
+              });
+
+              $('#modal_close, #overlay').click( function(){
+                window.location.href='http://localhost:3001/newfahrt/'+u.id;
+              });
+          },
+          error: function(xhr, options, e) {
+    			$('#u').html(e);
+				}
+        });
         });
       });
-    });
     </script>
 </head>
 <header>
@@ -73,6 +88,23 @@
 <footer>
     Copyright Igelex
 </footer>
+<!-- FENSTER -->
+
+<div id="modal_form">
+      <span id="modal_close">X</span>
+            <p id="mel">
+                Neuer Benutzer erfolgreich erstellt
+            </p>
+            <p>
+              Ihre Benutzer-Id:<span id="u" style="color: #37A953;"> </span>
+            </p>
+            <p>
+              Bawahren Sie diese gut auf, um auf Ihre persönlichen Daten <br>
+              zugreifen zu können!
+            </p>
+</div>
+<div id="overlay"></div>
+
 <script type="text/javascript">
   function getForm(){
     var id = document.getElementById('mail').value;
