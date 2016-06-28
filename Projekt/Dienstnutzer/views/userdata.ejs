@@ -104,6 +104,21 @@ $(function(){
     alert("Delete User");
     //Abschicken und Seite neu laden unterbinden
     event.preventDefault();
+
+    //ALLE FAHRTEN DES USERS Löschen
+    alert("Delete fahrten alle");
+    $.ajax({
+      type: 'GET',
+      host: 'localhost',
+      url: '/fahrten',
+      contentType: 'application/json',
+      success: function(data) {
+        alert (data);
+        alert("fahrten geholt");
+        alert("jetzt alle löschen");
+      }
+    });
+
     $.ajax({
       type: 'DELETE',
       host: 'localhost',

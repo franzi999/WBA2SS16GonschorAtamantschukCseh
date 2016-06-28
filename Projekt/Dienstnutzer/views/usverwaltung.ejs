@@ -17,16 +17,24 @@
 <body>
     <div id="mser">
         <div id="dser">
-            <form id="ser" action="http://localhost:3001/userdata" method="GET">
+            <form id="ser">
                 <label class="ser" for="id">Ihre ID</label><br>
                 <input type="text" id="id" name="id" required><br>
-                <input type="submit" name="submit" value="Suchen">
+                <input type="button" name="submit" onclick="getForm()" value="Suchen">
             </form>
         </div>
     </div>
 <footer>
     Copyright Igelex
 </footer>
+<script type="text/javascript">
+  function getForm(){
+    var id = document.getElementById('id').value;
+    var href ="http://localhost:3001/users/" + id + "/data";
+    alert(href);
+    document.location.href = href;
+  }
+</script>
 </body>
 
 </html>

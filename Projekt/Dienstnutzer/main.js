@@ -129,7 +129,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
                                                console.log("body: " + chunk);
                                                user = JSON.parse(chunk);
 
-																							res.json(user);																							//
+																							res.json(user);
 				 																			res.end();
                                        });
                                      });
@@ -166,7 +166,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 
 
 		//Userverwaltung(User Daten, angebotene Fahrten angucken/ändern/löschen)
-		app.get('/userdata', jsonParser, function (req, res) {
+		app.get('/users/:id/data', jsonParser, function (req, res) {
 		    fs.readFile('./views/userdata.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
 					var user=[];
@@ -179,18 +179,12 @@ app.get('/users/:id', jsonParser, function (req, res) {
 		          var useroptions = {
 		            host: 'localhost',
 		            port: '3000',
-		            path: '/users/'+req.query.id,
+		            path: '/users/'+req.params.id,
 		            method: 'GET'
 		          }
-
-						var fahrtoptions = {
-							host: 'localhost',
-							port: '3000',
-							path: '/fahrten',
-							method: 'GET'
-						}
 					}
-					console.log(req.query.id);
+
+					console.log(req.params.id);
 
 		          var externalRequestOne = http.request(useroptions, function(externalResponse){
 		            console.log('UserDate Holen');
@@ -198,12 +192,22 @@ app.get('/users/:id', jsonParser, function (req, res) {
 
 		              var user = JSON.parse(chunk);
 									console.log(user);
-
 									console.log(Object.keys(user).length);
+
+									console.log();
+									console.log(Object.keys(user).length);
+
 									if (Object.keys(user).length == 0) {
-												res.render('nores.ejs');
-												res.end();
+										res.render('nores.ejs');
+										res.end();
 									}else{
+
+										var fahrtoptions = {
+											host: 'localhost',
+											port: '3000',
+											path: '/fahrten',
+											method: 'GET'
+										}
 										var externalRequestTwo = http.request(fahrtoptions, function(externalResponse){
 				            console.log('UserFahrten Holen');
 				            externalResponse.on('data', function(chunk) {
@@ -213,7 +217,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 
 											fahrten.forEach(function(fahrt){
 
-												if(fahrt.u_id == req.query.id){
+												if(fahrt.u_id == req.params.id){
 													userFahrten.push(fahrt);
 													console.log(fahrt);
 												}
@@ -236,9 +240,9 @@ app.get('/users/:id', jsonParser, function (req, res) {
 									externalRequestOne.end();
 								}
 
-								});
 							});
-		          externalRequestOne.end();
+					});
+					externalRequestOne.end();
 		      });
 		    });
 
@@ -296,7 +300,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 														if(req.query[key]){
 															n++;
 									    				console.log(key + " -> " + req.query[key]);
-															console.log(n);
+															console.log('n = ' +n);
 											}
 									}
 
@@ -324,6 +328,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 											} else {
 														if(fahrt.plaetze >= req.query[key]){
 															count++;
+															console.log("Count erhöht " + count);
 												}
 											}
 										}
@@ -414,6 +419,26 @@ app.get('/users/:id', jsonParser, function (req, res) {
 	      });
 	    });
 
+app.get('/fahrten', jsonParser, function (req, res) {
+			    var options = {
+			      host: 'localhost',
+			      port: '3000',
+			      path: 'fahrten',
+			      method: 'GET'
+			    }
+
+			    var externalRequest = http.request(options, function(externalResponse){
+			      console.log('Alle fahrten');
+			      externalResponse.on('data', function(chunk) {
+
+			        var fahrten = JSON.parse(chunk);
+			        res.json(fahrten);
+			        res.end();
+			      });
+			    });
+					externalRequest.setHeader("content-type", "application/json");
+			    externalRequest.end();
+			});
 
 
 
@@ -488,27 +513,27 @@ app.post("/fahrten", jsonParser, function(req, res){
 					});
 
 				//Fahrt löschen
-			    app.delete('/fahrten/:id', jsonParser, function (req, res) {
-								var message="";
+app.delete('/fahrten/:id', jsonParser, function (req, res) {
+												var message="";
+								    		var options = {
+								           			host: 'localhost',
+								           			port: '3000',
+								           			path: '/fahrten/'+req.params.id,
+								           			method: 'DELETE'
+								   			}
 
-								    					var options = {
-								           				host: 'localhost',
-								           				port: '3000',
-								           				path: '/fahrten/'+req.params.id,
-								           				method: 'DELETE'
-								   						}
-
-														var externalRequest = http.request(options, function(externalResponse){
-			                            console.log('Fahrt löschen');
-																	externalResponse.on("data", function(chunk) {
-																			console.log("body: " + chunk);
-																			message=chunk;
-																			res.send(message);
-										    							res.end();
-																		});
-							    						});
-															externalRequest.end();
-			            });
+												var externalRequest = http.request(options, function(externalResponse){
+			                        console.log('Fahrt löschen');
+															externalResponse.on("data", function(chunk) {
+																console.log("body: " + chunk);
+																message=chunk;
+																res.send(message);
+										    				res.end();
+															});
+							    			});
+												externalRequest.setHeader("content-type", "application/json");
+												externalRequest.end();
+			          		});
 
 
     app.listen(serverPort, function(){

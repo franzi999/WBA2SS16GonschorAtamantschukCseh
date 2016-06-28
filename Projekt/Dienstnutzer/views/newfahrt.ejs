@@ -14,7 +14,7 @@
           start: $("#start").val(),
           ziel: $("#ziel").val(),
           plaetze: $("#plaetze").val(),
-          u_id: $("#u_id").val()
+          u_id: <%= u_id %>
         };
         $.ajax({
           type: 'POST',
@@ -65,8 +65,8 @@
               <input type="text" id="ziel" name="ziel" required><br>
               <label class="ser" for="plaetze">Plätze</label><br>
               <input type="text" id="plaetze" name="plaetze" required><br>
-              <label class="ser" for="u_id">Benutzer_ID</label><br>
-              <input type="text" id="u_id" name="u_id" required><br>
+              <!--<label class="ser" for="u_id">Benutzer_ID</label><br>
+              <input type="text" id="u_id" name="u_id" required><br>-->
               <input type="submit" id="newf" name="submit" value="Speichern">
           </form>
         </div>

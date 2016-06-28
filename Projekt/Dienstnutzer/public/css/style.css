@@ -53,7 +53,7 @@ footer{
     clear: both
 }
 
-input[type=button]{
+#buchb, input[type=button]{
     background-color: cadetblue;
     border: none;
     color: white;
