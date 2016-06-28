@@ -57,31 +57,42 @@ app.get('/users', function (req, res) {
 });
 
 app.get('/users/:id', function(req, res){
+  var empty=[];
     client.get('user:'+ req.params.id, function(err, rep){
         if (rep) {
             res.type('json').send(rep);
         }
         else{
-            res.status(404).type('text').send(rep);
+            res.status(404).type('json').send(empty);
         }
     });
 });
 
 //alle User löschen???
-
-/*app.delete('/users', function(req, res) {
+/*
+app.delete('/users', function(req, res) {
     client.keys('user:*', function(err, rep){
       console.dir(rep);
-        client.del('rep', function(err, rep){
+      var n = Object.keys(rep).length;
+      console.dir(n);
+      var i=1;
+      rep.forEach(function(r) {
+        client.del('user:' + i, function(err, rep){
         if (rep == 1) {
-            res.status(200).type('text').send('Alle User gelöscht');
+            console.log('User gelöscht');
           }
           else {
-            res.status(404).type('text').send('Der User existiert nicht');
-        }
+            console.log('Der User existiert nicht');
+          }
+          i++;
+        });
       });
+      if (i = n){
+        res.send('Alle user gelöscht');
+      }
   });
-});*/
+});
+*/
 
 
 app.delete('/users/:id', function(req, res){
