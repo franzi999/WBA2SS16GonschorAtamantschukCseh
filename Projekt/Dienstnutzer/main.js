@@ -5,6 +5,7 @@ var jsonParser = bodyParser.json();
 var ejs = require('ejs');
 var fs = require('fs');
 var http = require('http');
+var nodeMailer = require('nodemailer');
 
 var app = express();
 var serverPort = 3001;
@@ -364,6 +365,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 	    fs.readFile('./views/fahrtdata.ejs', {encoding: 'utf-8'}, function(err, filestring){
 
 				    				var fahrt=[];
+										var fahrtuid;
 
 				    				if (err){
 	                   		throw err;
@@ -381,6 +383,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 
 	                       			fahrt = JSON.parse(chunk);
 				            					console.log(fahrt.u_id);
+															fahrtuid = fahrt.u_id;
 				        					});
 				    					});
 
@@ -397,12 +400,12 @@ app.get('/users/:id', jsonParser, function (req, res) {
 			            					externalResponse.on('data', function(chunk) {
 
                             		var user = JSON.parse(chunk);
-																var users = [];
+																var users;
                             		console.log(fahrt.u_id);
 
 																user.forEach(function(user){
                                 		if(fahrt.u_id == user.id){
-																				users.push(user);
+																				users = user;
 																				console.log(users);
 																		}
                             		});
@@ -535,6 +538,41 @@ app.delete('/fahrten/:id', jsonParser, function (req, res) {
 												externalRequest.end();
 			          		});
 
+//nodeMailer
+app.post('/send', function(req, res){
+	console.log('IN MAIL');
+	console.log(req.body);
+	var transporter = nodeMailer.createTransport({
+		service: 'localhost',
+		port: 25,
+		auth: {
+        user: 'username',
+        pass: 'password'
+    }
+	});
+
+	var mailOptions = {
+		from: 'Mitfahergelegenheit <mfgmail.com>',
+		to: req.body.to,
+		subject: 'Bestellestätigung',
+		text:'Sie haben folgende Fahrt bestellt:',
+		html: '<ul><li>Start : ' + req.body.start +'</li><li>Ziel : ' + req.body.ziel +
+		'</li><p> Kontaktdaten :</p><ul><li> Nachname :' + req.body.nachname+ '</li><li>Vorname : ' +req.body.vorname+
+		'<li>Tel : '+req.body.tel+'</li><li>Handy :'+req.body.mobil+ '</li><li>Email :'+req.body.email+
+		'<li>Fahrzeug : '+req.body.car+'</li></ul>'
+	};
+
+	transporter.sendMail(mailOptions, function(err){
+		if(err){
+			console.log('Mail nicht gesendet');
+			res.send('Mail nicht gesendet');
+		}
+		else{
+			console.log('Mail gesendet');
+			res.send('Message sand');
+		}
+	});
+});
 
     app.listen(serverPort, function(){
       console.log("Server gestartet");
