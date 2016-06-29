@@ -534,14 +534,7 @@ app.delete('/fahrten/:id', jsonParser, function (req, res) {
 app.post('/send', function(req, res){
 	console.log('IN MAIL');
 	console.log(req.body);
-	var transporter = nodeMailer.createTransport({
-		service: 'localhost',
-		port: 25,
-		auth: {
-        user: 'username',
-        pass: 'password'
-    }
-	});
+	var transporter = nodeMailer.createTransport(transport, [defaults]);
 
 	var mailOptions = {
 		from: 'Mitfahergelegenheit <mfgmail.com>',

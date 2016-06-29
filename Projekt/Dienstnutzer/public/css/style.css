@@ -162,6 +162,14 @@ input[type=text]:focus {
     font-family: "Verdana";
     font-size: 20px;
 }
+#newfdiv {
+  padding: 40px 0 0 60px;
+  height: 500px;
+  width: 890px;
+  background-color: white;
+  font-family: "Verdana";
+  font-size: 20px;
+}
 
 #dputf{
   padding: 40px 0 0 60px;
