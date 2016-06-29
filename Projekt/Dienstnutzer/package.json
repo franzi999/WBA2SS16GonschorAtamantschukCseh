@@ -1,0 +1,22 @@
+{
+  "name": "main.js",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "redis" : "^3.2.0",
+    "ejs": "^2.3.3",
+    "nodemailer": "^2.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/franzi999/WBA2SS16GonschorAtamantschukCseh"
+  },
+  "author": "Franziska Gonschor, Sergej Atamantschuk, Krisztian Cseh",
+  "license": "ISC",
+}
