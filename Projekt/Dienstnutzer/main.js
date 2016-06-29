@@ -411,26 +411,29 @@ app.get('/users/:id', jsonParser, function (req, res) {
 	      });
 	    });
 
-app.get('/fahrten', jsonParser, function (req, res) {
-			    var options = {
-			      host: 'localhost',
-			      port: '3000',
-			      path: 'fahrten',
-			      method: 'GET'
-			    }
+			app.get('/fahrten', jsonParser, function (req, res) {
 
-			    var externalRequest = http.request(options, function(externalResponse){
-			      console.log('Alle fahrten');
-			      externalResponse.on('data', function(chunk) {
+								var options = {
+									host: 'localhost',
+									port: '3000',
+									path: '/fahrten',
+									method: 'GET'
+								}
 
-			        var fahrten = JSON.parse(chunk);
-			        res.json(fahrten);
-			        res.end();
-			      });
-			    });
-					externalRequest.setHeader("content-type", "application/json");
-			    externalRequest.end();
-			});
+								var externalRequest = http.request(options, function(externalResponse){
+									console.log('Fahrt nach Id');
+									externalResponse.on('data', function(chunk) {
+
+										var fahrt = JSON.parse(chunk);
+										console.log(fahrt);
+
+										res.json(fahrt);
+										res.end();
+									});
+								});
+								externalRequest.setHeader("content-type", "text/plain");
+								externalRequest.end();
+					});
 
 
 
