@@ -155,6 +155,7 @@ app.get('/users/:id', jsonParser, function (req, res) {
 														 	   res.end();
 													 });
 												 });
+												 externalRequest.setHeader("content-type", "text/plain");
 												 externalRequest.end();
 										 });
 
@@ -177,8 +178,6 @@ app.get('/users/:id', jsonParser, function (req, res) {
 		            method: 'GET'
 		          }
 					}
-
-					console.log(req.params.id);
 
 		          var externalRequestOne = http.request(useroptions, function(externalResponse){
 		            console.log('UserDate Holen');
@@ -450,7 +449,6 @@ app.get('/users/:id', jsonParser, function (req, res) {
 		app.put('/fahrten/:id', jsonParser, function (req, res) {
 
 									var newFahrt =JSON.stringify(req.body);
-									console.log(newFahrt);
 
 								        var options = {
 								            host: 'localhost',
@@ -526,7 +524,7 @@ app.delete('/fahrten/:id', jsonParser, function (req, res) {
 										    				res.end();
 															});
 							    			});
-												externalRequest.setHeader("content-type", "application/json");
+												externalRequest.setHeader("content-type", "text/plain");
 												externalRequest.end();
 			          		});
 
@@ -537,7 +535,7 @@ app.post('/send', function(req, res){
 	var transporter = nodeMailer.createTransport(transport, [defaults]);
 
 	var mailOptions = {
-		from: 'Mitfahergelegenheit <mfgmail.com>',
+		from: 'Mitfahergelegenheit <mf@gmail.com>',
 		to: req.body.to,
 		subject: 'Bestellestätigung',
 		text:'Sie haben folgende Fahrt bestellt:',
