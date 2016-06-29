@@ -78,9 +78,9 @@
               <input type="submit" id="new" name="submit" value="Speichern">
           </form>
           <form id="weiter">
-              <label class="ser" for="mail">Oder Ihre ID eingeben</label><br>
+              <label class="ser" for="uidr">Oder Ihre ID eingeben</label><br>
               <input type="text" id="mail" name="u_id">
-              <input type="button" onclick="getForm()" value="Weiter">
+              <input type="button" id="w" value="Weiter">
           </form>
 
         </div>
@@ -95,10 +95,10 @@
             <p id="mel">
                 Neuer Benutzer erfolgreich erstellt
             </p>
-            <p>
+            <p id ="hide">
               Ihre Benutzer-Id:<span id="u" style="color: #37A953;"> </span>
             </p>
-            <p>
+            <p id="hideto">
               Bawahren Sie diese gut auf, um auf Ihre persönlichen Daten <br>
               zugreifen zu können!
             </p>
@@ -107,9 +107,51 @@
 
 <script type="text/javascript">
   function getForm(){
-    var id = document.getElementById('mail').value;
+    var id = document.getElementById('uidr').value;
     document.location.href = 'http://localhost:3001/newfahrt/' + id;
   }
+
+  $(function(){
+    $("#w").click(function(event) {
+      alert("CHeck");
+      event.preventDefault();
+      var userid = $('#mail').val();
+      $.ajax({
+        type: 'GET',
+        host: 'localhost',
+        url: '/users/' + userid,
+        contentType: 'text/plain',
+        success: function(data){
+          if (data.length==0){
+            $('#mel').html('user mit der id: '+userid+ ' existiert nicht');
+            $('#hide').css('display', 'none');
+            $('#hideto').css('display', 'none');
+
+            $('#overlay').fadeIn(400,
+              function(){
+                $('#modal_form')
+                  .css('display', 'block')
+                  .animate({opacity: 1, top: '50%'}, 200);
+              });
+
+              $('#modal_close, #overlay').click( function(){
+		              $('#modal_form')
+			               .animate({opacity: 0, top: '45%'}, 200,
+				                 function(){
+					                      $(this).css('display', 'none');
+					                      $('#overlay').fadeOut(400);
+				                          }
+			                        );
+	            });
+          }
+          else {
+            document.location.href = 'http://localhost:3001/newfahrt/' + userid;
+          }
+        }
+      });
+    });
+  });
+
 </script>
 </body>
 

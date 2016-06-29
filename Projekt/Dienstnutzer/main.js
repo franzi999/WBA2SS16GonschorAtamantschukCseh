@@ -43,34 +43,27 @@ app.get('/usverwaltung', function(req, res){
 
 
 app.get('/users/:id', jsonParser, function (req, res) {
-    fs.readFile('./views/user.ejs', {encoding: 'utf-8'}, function(err, filestring){
-      if (err){
-        throw err;
-      } else {
+					console.log(req.params);
           var options = {
             host: 'localhost',
             port: '3000',
             path: '/users/'+req.params.id,
             method: 'GET'
           }
-				}
 
           var externalRequest = http.request(options, function(externalResponse){
             console.log('User nach Id');
             externalResponse.on('data', function(chunk) {
 
               var user = JSON.parse(chunk);
+							console.log(user);
 
-              var html = ejs.render(filestring, {user:user});
-              res.setHeader('content-type', 'text/html');
-              res.writeHead(200);
-              res.write(html);
+              res.json(user);
               res.end();
             });
           });
           externalRequest.end();
       });
-    });
 
 		//NUR Formular
 		app.get('/putuser/:id', function(req, res){
@@ -193,10 +186,6 @@ app.get('/users/:id', jsonParser, function (req, res) {
 
 		              var user = JSON.parse(chunk);
 									console.log(user);
-									console.log(Object.keys(user).length);
-
-									console.log();
-									console.log(Object.keys(user).length);
 
 									if (Object.keys(user).length == 0) {
 										res.render('nores.ejs');
